@@ -5,7 +5,7 @@
       <div class="name-box">
         <h2 class="nick">{{ userStore.user_name }}</h2>
         <div class="age">
-          <span>活跃1天</span>
+          <span>已入坑1天</span>
           <span class="give-point"></span>
         </div>
       </div>
@@ -13,13 +13,13 @@
     <div class="counts-view">
       <div class="counts flex-view">
         <div class="fans-box flex-item" @click="clickMenu('collectThingView')">
-          <div class="text">收藏</div>
+          <div class="text">收藏的坑</div>
           <div class="num">{{collectCount}}</div>
         </div>
         <div class="split-line">
         </div>
         <div class="follow-box flex-item" @click="clickMenu('wishThingView')">
-          <div class="text">心愿单</div>
+          <div class="text">梦想的坑</div>
           <div class="num">{{wishCount}}</div>
         </div>
 <!--        <div class="split-line">-->
@@ -31,57 +31,57 @@
       </div>
     </div>
     <div class="order-box">
-      <div class="title">企业招聘中心</div>
+      <div class="title">坑马指挥部</div>
       <div class="list">
         <div class="mine-item flex-view" @click="clickMenu('companyPostView')">
           <img :src="CommentIconImg">
-          <span>投递管理</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('myThingView')">
+          <span>待宰名单</span>
+          </div>
+          <div class="mine-item flex-view" @click="clickMenu('myThingView')">
           <img :src="CommentIconImg">
-          <span>岗位管理</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('myCompanyView')">
+          <span>坑位管理</span>
+          </div>
+          <div class="mine-item flex-view" @click="clickMenu('myCompanyView')">
           <img :src="CommentIconImg">
-          <span>公司资料</span>
+          <span>老板档案</span>
         </div>
       </div>
     </div>
     <div class="order-box">
-      <div class="title">个人求职中心</div>
+      <div class="title">牛马作战室</div>
       <div class="list">
         <div class="mine-item flex-view" @click="clickMenu('myPostView')">
           <img :src="SettingIconImage" alt="编辑资料">
-          <span>我的投递</span>
+          <span>我的跳坑记录</span>
         </div>
         <div class="mine-item flex-view" @click="clickMenu('resumeEditView')">
           <img :src="SettingIconImage" alt="编辑资料">
-          <span>我的简历</span>
+          <span>我的卖身契</span>
         </div>
         <div class="mine-item flex-view" @click="clickMenu('commentView')">
           <img :src="SettingIconImage">
-          <span>我的评论</span>
+          <span>我的踩坑日记</span>
         </div>
       </div>
     </div>
     <div class="setting-box">
-      <div class="title">账号与设置</div>
+      <div class="title">牛马档案</div>
       <div class="list">
         <div class="mine-item flex-view" @click="clickMenu('userInfoEditView')">
           <img :src="SettingIconImage" alt="编辑资料">
-          <span>编辑资料</span>
+          <span>修改卖身条件</span>
         </div>
         <div class="mine-item flex-view" @click="clickMenu('securityView')">
           <img :src="SafeIconImage" alt="账号安全">
-          <span>账号安全</span>
+          <span>防止被卖号</span>
         </div>
         <div class="mine-item flex-view" @click="clickMenu('pushView')">
           <img :src="PushIconImage" alt="推送设置">
-          <span>推送设置</span>
+          <span>催命通知设置</span>
         </div>
         <div class="mine-item flex-view" @click="clickMenu('messageView')">
           <img :src="MessageIconImage" alt="消息管理">
-          <span>消息管理</span>
+          <span>催命消息管理</span>
         </div>
       </div>
     </div>

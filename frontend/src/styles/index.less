@@ -1,20 +1,79 @@
-// Global theme tokens for unified brand style
+// ============================================
+// 牛马直聘 · 夜间工地风 主题系统
+// ============================================
 :root {
-  --nm-primary: #3d5b96;
-  --nm-primary-hover: #2f4a7f;
-  --nm-accent: #4684e2;
-  --nm-text-main: #152844;
-  --nm-text-sub: #5f77a6;
-  --nm-border: #cedce4;
-  --nm-bg-soft: #f5f9fb;
-  --nm-radius-sm: 4px;
+  // 主色 - 工地橙
+  --nm-primary: #ea580c;
+  --nm-primary-hover: #c2410c;
+
+  // 强调色 - 危险红
+  --nm-accent: #dc2626;
+  --nm-accent-light: #fca5a5;
+
+  // 文字色
+  --nm-text-main: #1c1917;
+  --nm-text-sub: #78716c;
+  --nm-text-muted: #a8a29e;
+
+  // 背景色 - 暖奶白
+  --nm-bg: #fafaf7;
+  --nm-bg-soft: #f5f5f0;
+  --nm-bg-card: #ffffff;
+
+  // 深色区域（导航 / 页脚）
+  --nm-dark: #1c1917;
+  --nm-dark-2: #292524;
+  --nm-dark-3: #44403c;
+
+  // 边框
+  --nm-border: #e7e5e4;
+  --nm-border-dark: #57534e;
+
+  // 圆角 - 更工业化
+  --nm-radius-sm: 2px;
+  --nm-radius: 4px;
   --nm-radius-pill: 999px;
+
+  // 阴影
+  --nm-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  --nm-shadow-md: 0 4px 24px rgba(0,0,0,0.12);
+}
+
+// 全局基础
+body {
+  background: var(--nm-bg);
+  color: var(--nm-text-main);
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 a {
   color: var(--nm-primary);
+  transition: color 0.2s;
 }
 
 a:hover {
   color: var(--nm-primary-hover);
+}
+
+// 全局滚动条美化
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--nm-bg-soft);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--nm-dark-3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nm-primary);
+}
+
+// 全局选中色
+::selection {
+  background: var(--nm-primary);
+  color: #fff;
 }

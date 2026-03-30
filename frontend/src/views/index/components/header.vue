@@ -5,10 +5,10 @@
     </div>
     <div class="search-entry">
       <img :src="SearchIcon" class="search-icon">
-      <input placeholder="搜索职位、公司、技能" ref="keywordRef" @keyup.enter="search" />
+      <input placeholder="搜索下一个坑..." ref="keywordRef" @keyup.enter="search" />
     </div>
     <div class="right-view">
-      <a style="font-size:16px;line-height: 32px;" @click="handleZhaoren">企业招聘</a>
+      <a style="font-size:16px;line-height: 32px;" @click="handleZhaoren">我要压榨牛马</a>
       <template v-if="userStore.user_token">
         <a-dropdown>
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
@@ -17,13 +17,13 @@
           <template #overlay>
             <a-menu>
               <a-menu-item>
-                <a @click="goUserCenter('resumeEditView')">我的简历</a>
+                <a @click="goUserCenter('resumeEditView')">我的卖身契</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="goUserCenter('userInfoEditView')">个人设置</a>
+                <a @click="goUserCenter('userInfoEditView')">牛马设置</a>
               </a-menu-item>
               <a-menu-item>
-                <a @click="quit()">退出</a>
+                <a @click="quit()">提桶跑路</a>
               </a-menu-item>
             </a-menu>
           </template>
@@ -34,7 +34,7 @@
         <!--        </div>-->
       </template>
       <template v-else>
-        <button class="login btn hidden-sm" @click="goLogin()">立即登录</button>
+        <button class="login btn hidden-sm" @click="goLogin()">入坑打卡</button>
       </template>
 
       <div class="right-icon" @click="msgVisible=true">
@@ -43,7 +43,7 @@
       </div>
       <div>
         <a-drawer
-            title="消息中心"
+            title="催命消息中心"
             placement="right"
             :closable="true"
             :maskClosable="true"
@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import {listApi} from '/@/api/index/notice'
 import {useUserStore} from "/@/store";
-import logoImage from '/@/assets/images/k-logo.png';
+const logoImage = '/images/cattlehores.png';
 import SearchIcon from '/@/assets/images/search-icon.svg';
 import AvatarIcon from '/@/assets/images/avatar.jpg';
 import MessageIcon from '/@/assets/images/message-icon.svg';
@@ -131,7 +131,7 @@ const handleZhaoren = () => {
   if(userId){
     router.push({name: 'myThingView'})
   }else {
-    message.warn('请先登录后发布岗位')
+    message.warn('想压榨牛马？请先登录')
   }
 
 }
@@ -157,70 +157,92 @@ const onClose = () => {
   left: 0;
   height: 56px;
   width: 100%;
-  background: #fff;
-  border-bottom: 1px solid var(--nm-border);
+  background: var(--nm-dark);
+  border-bottom: 3px solid var(--nm-primary);
   padding-left: 48px;
   z-index: 16;
   display: flex;
   flex-direction: row;
-  //justify-content: center; /*水平居中*/
-  align-items: center; /*垂直居中*/
+  align-items: center;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.4);
 }
 
 .logo {
-  margin-right: 24px;
+  margin-right: 28px;
   img {
-    width: 32px;
-    height: 32px;
+    height: 36px;
+    width: auto;
     cursor: pointer;
+    filter: none;
+    transition: transform 0.2s, opacity 0.2s;
+    &:hover {
+      transform: scale(1.05);
+      opacity: 0.9;
+    }
   }
 }
 
 .search-entry {
   position: relative;
-  width: 400px;
+  width: 380px;
   min-width: 200px;
-  height: 32px;
-  background: #ecf3fc;
+  height: 34px;
+  background: var(--nm-dark-2);
+  border: 1px solid var(--nm-dark-3);
   padding: 0 12px;
-  border-radius: 16px;
+  border-radius: var(--nm-radius-sm);
   font-size: 0;
   cursor: pointer;
+  transition: border-color 0.2s;
+
+  &:focus-within {
+    border-color: var(--nm-primary);
+  }
 
   img {
     max-width: 100%;
     height: auto;
+    filter: brightness(0.6);
   }
   .search-icon {
-    width: 18px;
-    margin: 7px 8px 0 0;
+    width: 16px;
+    margin: 9px 8px 0 0;
   }
   input {
     position: absolute;
-    top:4px;
-    width: 85%;
+    top: 5px;
+    width: 82%;
     height: 24px;
-    border: 0px;
-    outline:none;
-    color: #000;
-    background: #ecf3fc;
-    font-size: 14px;
+    border: none;
+    outline: none;
+    color: #e7e5e4;
+    background: transparent;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+
+    &::placeholder {
+      color: #78716c;
+    }
   }
 }
 
 .right-view {
   padding-right: 36px;
-  flex:1;
+  flex: 1;
   display: flex;
   flex-direction: row;
   gap: 20px;
-  justify-content: flex-end; /* 内容右对齐 */
+  justify-content: flex-end;
+  align-items: center;
 
-  .username {
-    height: 32px;
-    line-height: 32px;
-    text-align: center;
+  a {
+    color: #d6d3d1 !important;
+    transition: color 0.2s;
+    &:hover {
+      color: var(--nm-primary) !important;
+    }
   }
+
   button {
     outline: none;
     border: none;
@@ -231,18 +253,24 @@ const onClose = () => {
   }
   .right-icon {
     position: relative;
-    width: 24px;
+    width: 22px;
     margin: 4px 0 0 4px;
     cursor: pointer;
     display: inline-block;
     font-size: 0;
+    img {
+      filter: brightness(0.7) invert(1);
+    }
+    &:hover img {
+      filter: brightness(1) invert(1) sepia(1) saturate(5) hue-rotate(330deg);
+    }
     span {
       position: absolute;
       right: -15px;
       top: -3px;
       font-size: 12px;
       color: #fff;
-      background: #4684e2;
+      background: var(--nm-primary);
       border-radius: 8px;
       padding: 0 4px;
       height: 16px;
@@ -258,7 +286,7 @@ const onClose = () => {
       min-width: 8px;
       width: 8px;
       height: 8px;
-      background: #4684e2;
+      background: var(--nm-primary);
       border-radius: 50%;
     }
   }
@@ -269,18 +297,33 @@ const onClose = () => {
     border-radius: 50%;
     vertical-align: middle;
     cursor: pointer;
+    border: 2px solid var(--nm-dark-3);
+    transition: border-color 0.2s;
+    &:hover {
+      border-color: var(--nm-primary);
+    }
   }
   .btn {
     background: var(--nm-primary);
-    font-size: 14px;
+    font-size: 13px;
+    font-weight: 600;
     color: #fff;
-    border-radius: 32px;
+    border-radius: var(--nm-radius-sm);
     text-align: center;
-    width: 66px;
+    padding: 0 16px;
     height: 32px;
     line-height: 32px;
     vertical-align: middle;
-    margin-left: 32px;
+    margin-left: 16px;
+    letter-spacing: 0.5px;
+    transition: background 0.2s, transform 0.1s;
+    &:hover {
+      background: var(--nm-primary-hover);
+      transform: translateY(-1px);
+    }
+    &:active {
+      transform: translateY(0);
+    }
   }
 }
 
@@ -288,13 +331,13 @@ const onClose = () => {
   flex: 1;
 
   .list-title {
-    color: #152844;
-    font-weight: 600;
-    font-size: 18px;
-    //line-height: 24px;
+    color: var(--nm-text-main);
+    font-weight: 700;
+    font-size: 16px;
     height: 48px;
     margin-bottom: 4px;
-    border-bottom: 1px solid #cedce4;
+    border-bottom: 2px solid var(--nm-primary);
+    padding-bottom: 8px;
   }
 }
 
@@ -309,10 +352,8 @@ const onClose = () => {
   }
 
   .content-box {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
     flex: 1;
-    border-bottom: 1px dashed #e9e9e9;
+    border-bottom: 1px dashed var(--nm-border);
     padding: 4px 0 16px;
   }
 
@@ -322,17 +363,17 @@ const onClose = () => {
 
   .title-txt {
     color: var(--nm-primary);
-    font-weight: 500;
+    font-weight: 600;
     font-size: 14px;
   }
 
   .time {
-    color: #a1adc5;
-    font-size: 14px;
+    color: var(--nm-text-muted);
+    font-size: 13px;
   }
 
   .head-text {
-    color: #152844;
+    color: var(--nm-text-main);
     font-weight: 500;
     font-size: 14px;
     line-height: 22px;
@@ -344,11 +385,9 @@ const onClose = () => {
 
   .content {
     margin-top: 4px;
-    color: #484848;
+    color: var(--nm-text-sub);
     font-size: 14px;
     line-height: 22px;
   }
-
 }
-
 </style>

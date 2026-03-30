@@ -12,8 +12,8 @@
               <!--              </div>-->
               <div class="thing-info-box">
                 <div class="thing-state">
-                  <span class="state hidden-sm">岗位状态</span>
-                  <span>正常</span>
+                  <span class="state hidden-sm">坑位状态</span>
+                  <span>可跳</span>
                 </div>
                 <h1 class="thing-name">{{ detailData.title }}</h1>
                 <span>
@@ -21,30 +21,30 @@
                   <span class="a-price">{{ detailData.salary }}</span>
                 </span>
                 <div class="translators flex-view" style="">
-                  <span>所属公司：</span>
+                  <span>压榨方：</span>
                   <span class="name">{{ detailData.company_title }}</span>
                 </div>
                 <div class="translators flex-view" style="">
-                  <span>工作地点：</span>
+                  <span>受难地：</span>
                   <span class="name">{{ detailData.location }}</span>
                 </div>
                 <div class="translators flex-view" style="">
-                  <span>学历要求：</span>
+                  <span>文凭门槛：</span>
                   <span class="name">{{ detailData.education }}</span>
                 </div>
                 <div class="translators flex-view" style="">
-                  <span>经验要求：</span>
+                  <span>老马资历：</span>
                   <span class="name">{{ detailData.work_expe }}</span>
                 </div>
                 <div class="translators flex-view" style="">
-                  <span>岗位描述：</span>
+                  <span>画饼说明：</span>
                   <span class="name">{{ detailData.description }}</span>
                 </div>
 
-                <a-popconfirm title="确定投递?" ok-text="是" cancel-text="否" @confirm="handleOrder(detailData)">
+                <a-popconfirm title="确定跳坑？" ok-text="跳！" cancel-text="再想想" @confirm="handleOrder(detailData)">
                   <button class="buy-btn">
                     <img :src="AddIcon"/>
-                    <span>投递简历</span>
+                    <span>跳坑投递</span>
                   </button>
                 </a-popconfirm>
 
@@ -57,7 +57,7 @@
                 </div>
                 <div class="count-box flex-view">
                   <div class="count-text-box">
-                    <span class="count-title">加入心愿单</span>
+                    <span class="count-title">加入梦想坑</span>
                   </div>
                   <div class="count-num-box">
                     <span class="num-text">{{ detailData.wish_count }}</span>
@@ -70,7 +70,7 @@
                 </div>
                 <div class="count-box flex-view">
                   <div class="count-text-box">
-                    <span class="count-title">收藏</span>
+                    <span class="count-title">收藏此坑</span>
                   </div>
                   <div class="count-num-box">
                     <span class="num-text">{{ detailData.collect_count }}</span>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="count-box flex-view">
                   <div class="count-text-box">
-                    <span class="count-title">分享</span>
+                    <span class="count-title">坑友共享</span>
                   </div>
                   <div class="count-num-box">
                     <span class="num-text"></span>
@@ -115,18 +115,18 @@
 
             <!--评论-->
             <div class="thing-comment" :class="selectTabIndex > 0? '':'hide'">
-              <div class="title">发表新的评论</div>
+              <div class="title">分享踩坑经历</div>
               <div class="publish flex-view">
                 <img :src="AvatarIcon" class="mine-img">
-                <input placeholder="说点什么..." class="content-input" ref="commentRef">
-                <button class="send-btn" @click="sendComment()">发送</button>
+                <input placeholder="说说你是怎么被坑的..." class="content-input" ref="commentRef">
+                <button class="send-btn" @click="sendComment()">发出求救</button>
               </div>
               <div class="tab-view flex-view">
-                <div class="count-text">共有{{ commentData.length }}条评论</div>
+                <div class="count-text">共有{{ commentData.length }}条踩坑记录</div>
                 <div class="tab-box flex-view" v-if="commentData.length > 0">
                   <span :class="sortIndex === 0? 'tab-select': ''" @click="sortCommentList('recent')">最新</span>
                   <div class="line"></div>
-                  <span :class="sortIndex === 1? 'tab-select': ''" @click="sortCommentList('hot')">热门</span>
+                  <span :class="sortIndex === 1? 'tab-select': ''" @click="sortCommentList('hot')">最惨</span>
                 </div>
               </div>
               <div class="comments-list">
@@ -138,7 +138,7 @@
                       <div class="time">{{ item.comment_time }}</div>
                     </div>
                     <div class="float-right">
-                      <span @click="like(item.id)">推荐</span>
+                      <span @click="like(item.id)">踩过</span>
                       <span class="num">{{ item.like_count }}</span>
                     </div>
                   </div>
@@ -148,7 +148,7 @@
                   <div class="infinite-status-prompt" style="">
                     <div slot="no-results" class="no-results">
                       <div></div>
-                      <p>没有更多了</p>
+                      <p>坑友们都沉默了</p>
                     </div>
                   </div>
                 </div>
@@ -157,7 +157,7 @@
 
           </div>
           <div class="recommend" style="">
-            <div class="title">热门推荐</div>
+            <div class="title">精选坑位</div>
             <div class="things">
               <!--              <div class="thing-item thing-item" v-for="item in recommendData" @click="handleDetail(item)">-->
               <!--                <div class="img-view">-->
@@ -232,7 +232,7 @@ const userStore = useUserStore();
 let thingId = ref('')
 let detailData = ref({})
 let tabUnderLeft = ref(6)
-let tabData = ref(['面试评价'])
+let tabData = ref(['踩坑经历'])
 let selectTabIndex = ref(1)
 
 let commentData = ref([])
@@ -289,7 +289,7 @@ const collect = () => {
   }
 }
 const share = () => {
-  let content = '分享一个非常好玩的网站 ' + window.location.href
+  let content = '快来牛马直聘一起跳坑！ ' + window.location.href
   let shareHref = 'http://service.weibo.com/share/share.php?title=' + content
   window.open(shareHref)
 }
@@ -298,7 +298,7 @@ const handleOrder = (detailData) => {
   const userId = userStore.user_id
 
   if (!userId) {
-    message.warn("请先登录")
+      message.warn("请先登录再跳坑")
     return
   }
 
@@ -317,12 +317,12 @@ const handleOrder = (detailData) => {
       resume: resumeId,
       thing: thingId
     }).then(res => {
-      message.success("投递成功")
+      message.success("已成功跳坑！祝你好运")
     }).catch(err =>{
       message.success(err.msg || "投递失败")
     })
   }).catch(err => {
-    message.warn("请完善简历")
+      message.warn("还没写卖身契？请先完善简历")
     router.push({name: 'resumeEditView'})
   })
 
@@ -486,17 +486,20 @@ const sortCommentList = (sortType) => {
     line-height: 26px;
 
     .state {
-      font-weight: 500;
-      color: #4684e2;
-      background: rgba(70, 132, 226, .1);
-      border-radius: 2px;
-      padding: 5px 8px;
+      font-weight: 600;
+      color: var(--nm-primary);
+      background: rgba(234, 88, 12, 0.1);
+      border-radius: var(--nm-radius-sm);
+      padding: 3px 10px;
       margin-right: 16px;
+      border: 1px solid rgba(234, 88, 12, 0.2);
+      font-size: 12px;
+      letter-spacing: 0.5px;
     }
 
     span {
       font-size: 14px;
-      color: #152844;
+      color: var(--nm-text-main);
     }
   }
 
@@ -613,17 +616,25 @@ const sortCommentList = (sortType) => {
 .buy-btn {
   cursor: pointer;
   display: block;
-  background: #4684e2;
-  border-radius: 4px;
+  background: linear-gradient(135deg, var(--nm-primary), #c2410c);
+  border-radius: var(--nm-radius-sm);
   text-align: center;
   color: #fff;
   font-size: 14px;
-  height: 36px;
-  line-height: 36px;
-  width: 110px;
+  font-weight: 700;
+  height: 38px;
+  line-height: 38px;
+  width: 120px;
   outline: none;
   border: none;
   margin-top: 18px;
+  letter-spacing: 1px;
+  transition: opacity 0.2s, transform 0.1s;
+
+  &:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
 }
 
 .buy-btn img {
@@ -924,19 +935,23 @@ const sortCommentList = (sortType) => {
 
     .send-btn {
       margin-left: 10px;
-      background: #4684e2;
-      border-radius: 4px;
-      -webkit-box-flex: 0;
-      -ms-flex: 0 0 80px;
+      background: var(--nm-primary);
+      border-radius: var(--nm-radius-sm);
       flex: 0 0 80px;
       color: #fff;
-      font-size: 14px;
+      font-size: 13px;
+      font-weight: 600;
       text-align: center;
       height: 32px;
       line-height: 32px;
       outline: none;
-      border: 0px;
+      border: none;
       cursor: pointer;
+      transition: background 0.2s;
+
+      &:hover {
+        background: var(--nm-primary-hover);
+      }
     }
   }
 
@@ -1065,7 +1080,8 @@ const sortCommentList = (sortType) => {
 }
 
 .a-price {
-  color: #f26d49;
-  font-size: 21px;
+  color: var(--nm-primary);
+  font-size: 22px;
+  font-weight: 800;
 }
 </style>

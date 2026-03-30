@@ -5,7 +5,7 @@
       <div class="tab-text">
         <span>与</span>
         <span class="strong">{{ tData.keyword }}</span>
-        <span>相关的职位</span>
+        <span>相关的坑</span>
       </div>
     </div>
     <div class="content-list">

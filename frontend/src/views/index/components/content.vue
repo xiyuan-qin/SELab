@@ -2,12 +2,12 @@
   <div class="content">
     <div class="content-left">
       <div class="left-search-item">
-        <h4>职位分类</h4>
+        <h4>坑的种类</h4>
         <a-tree :tree-data="contentData.cData" :selected-keys="contentData.selectedKeys" @select="onSelect"
                 style="min-height: 220px;">
         </a-tree>
       </div>
-      <div class="left-search-item"><h4>热门筛选</h4>
+      <div class="left-search-item"><h4>热门坑位</h4>
         <div class="tag-view tag-flex-view">
             <span class="tag" :class="{'tag-select': contentData.selectTagId===item.id}"
                   v-for="item in contentData.tagData" :key="item.id"
@@ -46,7 +46,7 @@
               </p>
             </a>
           </div>
-          <div v-if="contentData.pageData.length <= 0 && !contentData.loading" class="no-data" style="">暂无匹配职位</div>
+          <div v-if="contentData.pageData.length <= 0 && !contentData.loading" class="no-data" style="">今日坑位已满，请明日再来</div>
         </div>
       </a-spin>
       <div class="page-view" style="">
@@ -75,7 +75,7 @@ const contentData = reactive({
   tagData: [],
   loading: false,
 
-  tabData: ['最新', '最热', '推荐'],
+  tabData: ['最新的坑', '最烫的坑', '为你推坑'],
   selectTabIndex: 0,
   tabUnderLeft: 12,
 
@@ -179,7 +179,7 @@ const getThingList = (data) => {
   display: flex;
   flex-direction: row;
   width: 1100px;
-  margin: 80px auto;
+  margin: 32px auto 80px;
 }
 
 .content-left {
@@ -195,11 +195,14 @@ const getThingList = (data) => {
 }
 
 h4 {
-  color: #4d4d4d;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-  height: 24px;
+  color: var(--nm-text-main);
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 22px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-left: 8px;
+  border-left: 3px solid var(--nm-primary);
 }
 
 .category-item {
@@ -295,30 +298,31 @@ li {
 }
 
 .tag {
-  background: #fff;
-  border: 1px solid #a1adc6;
-  -webkit-box-sizing: border-box;
+  background: var(--nm-bg-soft);
+  border: 1px solid var(--nm-border);
   box-sizing: border-box;
-  border-radius: 16px;
-  height: 20px;
-  line-height: 18px;
-  padding: 0 8px;
-  margin: 8px 8px 0 0;
+  border-radius: var(--nm-radius-sm);
+  height: 22px;
+  line-height: 20px;
+  padding: 0 10px;
+  margin: 8px 6px 0 0;
   cursor: pointer;
   font-size: 12px;
-  color: #152833;
+  color: var(--nm-text-sub);
+  transition: all 0.15s;
 }
 
 .tag:hover {
-  background: var(--nm-accent);
+  background: var(--nm-primary);
   color: #fff;
-  border: 1px solid var(--nm-accent);
+  border-color: var(--nm-primary);
 }
 
 .tag-select {
-  background: var(--nm-accent);
+  background: var(--nm-primary);
   color: #fff;
-  border: 1px solid var(--nm-accent);
+  border-color: var(--nm-primary);
+  font-weight: 600;
 }
 
 .content-right {
@@ -429,32 +433,36 @@ li {
 
     .order-view {
       position: relative;
-      color: #6c6c6c;
-      font-size: 14px;
+      color: var(--nm-text-sub);
+      font-size: 13px;
 
       .title {
         margin-right: 8px;
       }
 
       .tab {
-        color: #999;
-        margin-right: 20px;
+        color: var(--nm-text-muted);
+        margin-right: 4px;
         cursor: pointer;
+        padding: 4px 12px;
+        border-radius: var(--nm-radius-sm);
+        transition: all 0.15s;
+        display: inline-block;
+
+        &:hover {
+          color: var(--nm-primary);
+          background: rgba(234,88,12,0.06);
+        }
       }
 
       .tab-select {
-        color: var(--nm-text-main);
+        color: var(--nm-primary);
+        font-weight: 700;
+        background: rgba(234,88,12,0.08);
       }
 
       .tab-underline {
-        position: absolute;
-        bottom: 0;
-        left: 84px;
-        width: 16px;
-        height: 4px;
-        background: var(--nm-accent);
-        -webkit-transition: left .3s;
-        transition: left .3s;
+        display: none;
       }
     }
 
@@ -462,49 +470,65 @@ li {
 
   .pc-thing-list {
     margin-top: 24px;
-    -ms-flex-wrap: wrap;
     flex-wrap: wrap;
-    gap: 24px;
+    gap: 16px;
 
     .sub-li {
-      background-color: #f6fbfb;
+      background: var(--nm-bg-card);
       height: 120px;
       overflow: hidden;
-      transition: all .2s linear;
+      transition: all 0.2s ease;
       display: block;
       width: 260px;
       font-size: 0;
-      padding: 16px 20px;
+      padding: 0;
       box-sizing: border-box;
+      border: 1px solid var(--nm-border);
+      border-left: 3px solid var(--nm-border);
+      border-radius: var(--nm-radius);
+      cursor: pointer;
+      position: relative;
+
+      &:hover {
+        border-left-color: var(--nm-primary);
+        box-shadow: var(--nm-shadow-md);
+        transform: translateY(-2px);
+      }
+
       .job-info {
-        padding: 16px 20px;
+        padding: 16px 18px;
         box-sizing: border-box;
+        display: block;
       }
       .sub-li-top {
-        margin-bottom: 12px;
+        margin-bottom: 10px;
         display: flex;
         width: 100%;
         align-items: center;
+        justify-content: space-between;
         .name {
-          color: #222;
-          font-size: 16px;
-          font-weight: 500;
+          color: var(--nm-text-main);
+          font-size: 15px;
+          font-weight: 600;
           line-height: 22px;
-          transition: all .2s linear;
+          transition: color 0.2s;
           position: relative;
-          max-width: 200px;
-          margin-right: 8px;
+          max-width: 160px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
         }
         .salary {
-          font-size: 16px;
-          font-weight: 500;
-          color: #fe574a;
+          font-size: 15px;
+          font-weight: 700;
+          color: var(--nm-primary);
           line-height: 22px;
           flex: none;
+          letter-spacing: -0.3px;
         }
+      }
+      &:hover .name {
+        color: var(--nm-primary);
       }
       .sub-li-info {
         display: flex;
@@ -516,22 +540,23 @@ li {
       }
       .job-text {
         white-space: normal;
-        padding-right: 0;
         height: 22px;
         line-height: 22px;
         overflow: hidden;
         word-break: break-all;
-        max-width: none;
+        display: flex;
+        gap: 6px;
         span {
           display: inline-block;
-          height: 18px;
-          font-size: 13px;
+          height: 20px;
+          font-size: 12px;
           font-weight: 400;
-          color: #666;
-          line-height: 18px;
-          padding-right: 20px;
-          border-radius: 4px;
-          background: #f8f8f8;
+          color: var(--nm-text-sub);
+          line-height: 20px;
+          padding: 0 8px;
+          border-radius: 2px;
+          background: var(--nm-bg-soft);
+          border: 1px solid var(--nm-border);
         }
       }
     }
@@ -543,7 +568,7 @@ li {
       text-align: center;
       width: 100%;
       font-size: 16px;
-      color: #152844;
+      color: var(--nm-text-sub);
     }
   }
 
