@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>人才招聘系统 - 项目活动网络图（AON）</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+  background: #f0f2f5;
+  padding: 24px;
+  color: #333;
+}
+h1 {
+  text-align: center;
+  font-size: 22px;
+  color: #1a1a2e;
+  margin-bottom: 6px;
+}
+.subtitle {
+  text-align: center;
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+.subtitle strong { color: #e53e3e; }
+
+.card {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+.card h2 {
+  font-size: 15px;
+  color: #1a1a2e;
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #4a6fa5;
+}
+.card h2.critical { border-bottom-color: #e53e3e; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 12px;
+}
+.legend-item { display: flex; align-items: center; gap: 6px; }
+.leg-box {
+  width: 32px; height: 18px; border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: bold;
+}
+.leg-crit { background: #fff0f0; border: 2.5px solid #e53e3e; color: #e53e3e; }
+.leg-norm { background: #f0f4ff; border: 2px solid #4a6fa5; color: #4a6fa5; }
+.leg-line-crit { width: 36px; height: 3px; background: #e53e3e; border-radius: 2px; }
+.leg-line-norm { width: 36px; height: 0; border-top: 2px dashed #94a3b8; }
+.node-fmt {
+  font-size: 10px; border: 1px solid #999; padding: 2px 8px;
+  line-height: 1.6; color: #555;
+  background: #fafafa; border-radius: 3px;
+}
+
+/* Table */
+table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+th { background: #4a6fa5; color: white; padding: 8px 10px; text-align: center; white-space: nowrap; }
+td { padding: 6px 10px; border-bottom: 1px solid #e8e8e8; text-align: center; }
+tr:nth-child(even) td { background: #f9fbff; }
+.crit-row td { background: #fff8f8 !important; }
+.crit-row td:first-child { border-left: 3px solid #e53e3e; }
+.float-zero { font-weight: bold; color: #e53e3e; }
+.float-pos { color: #888; }
+.phase-header td { background: #e8edf5 !important; font-weight: bold; color: #1a1a2e; text-align: left; }
+
+.cp-section { line-height: 1.9; }
+.cp-section ul { margin-left: 20px; margin-top: 8px; }
+.cp-section li { font-size: 13px; color: #444; margin-bottom: 4px; }
+.cp-path {
+  font-family: 'Courier New', monospace;
+  color: #c0392b;
+  font-weight: bold;
+  font-size: 12px;
+}
+.cp-tag {
+  display: inline-block;
+  background: #e53e3e;
+  color: white;
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-size: 11px;
+  margin-left: 6px;
+}
+</style>
+</head>
+<body>
+
+<h1>人才招聘系统 · 项目活动网络图（AON）</h1>
+<p class="subtitle">山东大学 2026春 软件工程实验 &nbsp;|&nbsp; 项目总工期：<strong>27 天</strong> &nbsp;|&nbsp; 关键路径用红色标注</p>
+
+<!-- ==================== NETWORK DIAGRAM ==================== -->
+<div class="card">
+  <h2>项目活动网络图（Activity-on-Node）</h2>
+  <div class="legend">
+    <strong>图例：</strong>
+    <div class="legend-item"><div class="leg-box leg-crit">K</div><span>关键活动（总时差=0）</span></div>
+    <div class="legend-item"><div class="leg-box leg-norm">N</div><span>非关键活动</span></div>
+    <div class="legend-item"><div class="leg-line-crit"></div><span>关键路径箭头</span></div>
+    <div class="legend-item"><div class="leg-line-norm"></div><span>非关键路径箭头</span></div>
+    <div class="legend-item">
+      <div class="node-fmt">ES &nbsp;|&nbsp; 工期 &nbsp;|&nbsp; EF<br>──活动名称──<br>LS &nbsp;|&nbsp; 时差 &nbsp;|&nbsp; LF</div>
+      <span>节点格式</span>
+    </div>
+  </div>
+  <svg id="diagram" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+
+<!-- ==================== WBS TABLE ==================== -->
+<div class="card">
+  <h2>工作分解结构（WBS）与时间参数汇总</h2>
+  <table id="wbs-table">
+    <thead>
+      <tr>
+        <th>ID</th><th>活动名称</th><th>阶段</th><th>工期(天)</th>
+        <th>前置活动</th><th>ES</th><th>EF</th><th>LS</th><th>LF</th>
+        <th>总时差</th><th>关键活动</th>
+      </tr>
+    </thead>
+    <tbody id="wbs-body"></tbody>
+  </table>
+</div>
+
+<!-- ==================== CRITICAL PATH ==================== -->
+<div class="card">
+  <h2 class="critical">关键路径分析</h2>
+  <div class="cp-section">
+    <p>项目总工期：<strong>27 天</strong> &nbsp;（关键路径上任何活动延误，项目将同等延误）</p>
+    <p style="margin-top:12px"><strong>关键路径（共 5 条等长路径）：</strong></p>
+    <ul id="cp-list"></ul>
+    <p style="margin-top:14px"><strong>非关键活动（拥有总时差）：</strong></p>
+    <ul>
+      <li>E 接口文档设计 —— 总时差 <strong>1天</strong>，可延后 1 天开始</li>
+      <li>J 门户页面开发 —— 总时差 <strong>1天</strong>，可延后 1 天开始</li>
+      <li>P 管理后台API —— 总时差 <strong>1天</strong>，可延后 1 天开始</li>
+    </ul>
+    <p style="margin-top:14px;color:#666;font-size:12px">
+      * ES = 最早开始；EF = 最早完成；LS = 最晚开始；LF = 最晚完成；总时差 = LS - ES = LF - EF
+    </p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   DATA DEFINITIONS
+   ============================================================ */
+const nodes = [
+  // Phase 1: 项目启动
+  { id:'A', name:'需求调研',    phase:'项目启动', dur:2, es:0,  ef:2,  ls:0,  lf:2,  float:0, preds:[] },
+  { id:'B', name:'可行性分析报告', phase:'项目启动', dur:3, es:2,  ef:5,  ls:2,  lf:5,  float:0, preds:['A'] },
+  // Phase 2: 系统设计
+  { id:'C', name:'系统总体设计', phase:'系统设计', dur:2, es:5,  ef:7,  ls:5,  lf:7,  float:0, preds:['B'] },
+  { id:'D', name:'数据库设计',   phase:'系统设计', dur:2, es:7,  ef:9,  ls:7,  lf:9,  float:0, preds:['C'] },
+  { id:'E', name:'接口文档设计', phase:'系统设计', dur:2, es:7,  ef:9,  ls:8,  lf:10, float:1, preds:['C'] },
+  { id:'F', name:'前端UI设计',   phase:'系统设计', dur:3, es:7,  ef:10, ls:7,  lf:10, float:0, preds:['C'] },
+  // Phase 3: 后端开发
+  { id:'M', name:'后端环境搭建', phase:'后端开发', dur:1, es:9,  ef:10, ls:9,  lf:10, float:0, preds:['D'] },
+  { id:'N', name:'用户认证API',  phase:'后端开发', dur:3, es:10, ef:13, ls:10, lf:13, float:0, preds:['M','E'] },
+  { id:'O', name:'职位/公司/简历API', phase:'后端开发', dur:4, es:13, ef:17, ls:13, lf:17, float:0, preds:['N'] },
+  { id:'P', name:'管理后台API',  phase:'后端开发', dur:3, es:13, ef:16, ls:14, lf:17, float:1, preds:['N'] },
+  // Phase 4: 前端开发
+  { id:'G', name:'前端项目搭建', phase:'前端开发', dur:1, es:10, ef:11, ls:10, lf:11, float:0, preds:['F'] },
+  { id:'H', name:'用户认证(前端)',phase:'前端开发', dur:2, es:11, ef:13, ls:11, lf:13, float:0, preds:['G'] },
+  { id:'I', name:'公共组件开发', phase:'前端开发', dur:2, es:11, ef:13, ls:11, lf:13, float:0, preds:['G'] },
+  { id:'J', name:'门户页面开发', phase:'前端开发', dur:3, es:13, ef:16, ls:14, lf:17, float:1, preds:['H','I','E'] },
+  { id:'K', name:'用户中心页面', phase:'前端开发', dur:4, es:13, ef:17, ls:13, lf:17, float:0, preds:['H','I','E'] },
+  { id:'L', name:'管理后台页面', phase:'前端开发', dur:4, es:13, ef:17, ls:13, lf:17, float:0, preds:['H','I','E'] },
+  // Phase 5: 集成测试
+  { id:'Q', name:'前后端联调',   phase:'集成测试', dur:3, es:17, ef:20, ls:17, lf:20, float:0, preds:['O','P','J','K','L'] },
+  { id:'R', name:'系统测试',     phase:'集成测试', dur:2, es:20, ef:22, ls:20, lf:22, float:0, preds:['Q'] },
+  { id:'S', name:'Bug修复',      phase:'集成测试', dur:2, es:22, ef:24, ls:22, lf:24, float:0, preds:['R'] },
+  // Phase 6: 收尾
+  { id:'T', name:'部署上线',     phase:'项目收尾', dur:1, es:24, ef:25, ls:24, lf:25, float:0, preds:['S'] },
+  { id:'U', name:'文档整理',     phase:'项目收尾', dur:2, es:25, ef:27, ls:25, lf:27, float:0, preds:['T'] },
+];
+
+// Edge list
+const rawEdges = [
+  ['A','B'],['B','C'],
+  ['C','D'],['C','E'],['C','F'],
+  ['D','M'],['E','N'],['F','G'],
+  ['M','N'],
+  ['G','H'],['G','I'],
+  ['E','J'],['E','K'],['E','L'],
+  ['H','J'],['H','K'],['H','L'],
+  ['I','J'],['I','K'],['I','L'],
+  ['N','O'],['N','P'],
+  ['O','Q'],['P','Q'],['J','Q'],['K','Q'],['L','Q'],
+  ['Q','R'],['R','S'],['S','T'],['T','U'],
+];
+
+// Compute which edges are on critical path
+// An edge A→B is critical if both have float=0 AND EF(A) = ES(B)
+const nodeMap = {};
+nodes.forEach(n => nodeMap[n.id] = n);
+
+const critEdges = new Set();
+rawEdges.forEach(([a, b]) => {
+  const na = nodeMap[a], nb = nodeMap[b];
+  if (na.float === 0 && nb.float === 0 && na.ef === nb.es) {
+    critEdges.add(a + '-' + b);
+  }
+});
+
+/* ============================================================
+   NODE POSITIONS
+   Each column represents a group of nodes at the same ES level.
+   ============================================================ */
+const W = 120, H = 74; // node box dimensions
+const pos = {
+  A: [80,  310],
+  B: [250, 310],
+  C: [430, 310],
+  D: [610, 130],
+  E: [610, 310],
+  F: [610, 490],
+  M: [780, 130],
+  G: [780, 490],
+  N: [950, 210],
+  H: [950, 390],
+  I: [950, 510],
+  O: [1140, 100],
+  P: [1140, 230],
+  J: [1140, 360],
+  K: [1140, 470],
+  L: [1140, 570],
+  Q: [1340, 340],
+  R: [1500, 340],
+  S: [1640, 340],
+  T: [1760, 340],
+  U: [1900, 340],
+};
+
+const SVG_W = 1990;
+const SVG_H = 660;
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+const svg = document.getElementById('diagram');
+svg.setAttribute('width', SVG_W);
+svg.setAttribute('height', SVG_H);
+
+// Defs: arrowhead markers
+const defs = createEl('defs');
+defs.innerHTML = `
+  <marker id="arr-c" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+    <polygon points="0 0, 9 3.5, 0 7" fill="#e53e3e"/>
+  </marker>
+  <marker id="arr-n" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+    <polygon points="0 0, 9 3.5, 0 7" fill="#94a3b8"/>
+  </marker>
+`;
+svg.appendChild(defs);
+
+// Phase background bands
+const phaseBands = [
+  { label:'阶段一\n项目启动', x1:20,   x2:200,  y:10, color:'#e8f4fd' },
+  { label:'阶段二\n系统设计', x1:200,  x2:530,  y:10, color:'#e8fdf4' },
+  { label:'阶段三\n后端开发', x1:530,  x2:1080, y:10, color:'#fdf4e8' },
+  { label:'阶段四\n前端开发', x1:530,  x2:1080, y:370, color:'#f4e8fd' },
+  { label:'阶段五\n集成测试', x1:1080, x2:1700, y:10, color:'#fde8e8' },
+  { label:'阶段六\n项目收尾', x1:1700, x2:1970, y:10, color:'#e8ede8' },
+];
+
+// Draw phase bands (subtle background)
+const phaseColors = {
+  '项目启动': '#f0f7ff',
+  '系统设计': '#f0fff4',
+  '后端开发': '#fffaf0',
+  '前端开发': '#fdf4ff',
+  '集成测试': '#fff0f0',
+  '项目收尾': '#f0f4f0',
+};
+
+// Draw edges first (behind nodes)
+rawEdges.forEach(([a, b]) => {
+  const [ax, ay] = pos[a];
+  const [bx, by] = pos[b];
+  const isCrit = critEdges.has(a + '-' + b);
+
+  const x1 = ax + W/2; // right edge of source
+  const y1 = ay;
+  const x2 = bx - W/2; // left edge of dest
+  const y2 = by;
+  const mx = (x1 + x2) / 2;
+
+  const path = createEl('path');
+  const d = `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`;
+  path.setAttribute('d', d);
+  path.setAttribute('fill', 'none');
+
+  if (isCrit) {
+    path.setAttribute('stroke', '#e53e3e');
+    path.setAttribute('stroke-width', '2.5');
+    path.setAttribute('marker-end', 'url(#arr-c)');
+  } else {
+    path.setAttribute('stroke', '#94a3b8');
+    path.setAttribute('stroke-width', '1.5');
+    path.setAttribute('stroke-dasharray', '5,3');
+    path.setAttribute('marker-end', 'url(#arr-n)');
+  }
+  svg.appendChild(path);
+});
+
+// Draw nodes
+nodes.forEach(n => {
+  const [cx, cy] = pos[n.id];
+  const x = cx - W/2;
+  const y = cy - H/2;
+  const isCrit = n.float === 0;
+
+  const g = createEl('g');
+  g.setAttribute('transform', `translate(${x},${y})`);
+
+  // Background rect
+  const rect = createEl('rect');
+  rect.setAttribute('width', W);
+  rect.setAttribute('height', H);
+  rect.setAttribute('rx', '4');
+  rect.setAttribute('fill', isCrit ? '#fff5f5' : '#f4f8ff');
+  rect.setAttribute('stroke', isCrit ? '#e53e3e' : '#4a6fa5');
+  rect.setAttribute('stroke-width', isCrit ? '2.5' : '1.8');
+  g.appendChild(rect);
+
+  // Top divider line
+  const line1 = createEl('line');
+  line1.setAttribute('x1','0'); line1.setAttribute('y1','22');
+  line1.setAttribute('x2', W); line1.setAttribute('y2','22');
+  line1.setAttribute('stroke', isCrit ? '#e53e3e' : '#4a6fa5');
+  line1.setAttribute('stroke-width','1');
+  g.appendChild(line1);
+
+  // Bottom divider line
+  const line2 = createEl('line');
+  line2.setAttribute('x1','0'); line2.setAttribute('y1', H - 22);
+  line2.setAttribute('x2', W); line2.setAttribute('y2', H - 22);
+  line2.setAttribute('stroke', isCrit ? '#e53e3e' : '#4a6fa5');
+  line2.setAttribute('stroke-width','1');
+  g.appendChild(line2);
+
+  // Vertical dividers in top row
+  const vl1 = createEl('line');
+  vl1.setAttribute('x1','36'); vl1.setAttribute('y1','0');
+  vl1.setAttribute('x2','36'); vl1.setAttribute('y2','22');
+  vl1.setAttribute('stroke', isCrit ? '#e53e3e' : '#4a6fa5');
+  vl1.setAttribute('stroke-width','0.8');
+  g.appendChild(vl1);
+  const vl2 = createEl('line');
+  vl2.setAttribute('x1', W-36); vl2.setAttribute('y1','0');
+  vl2.setAttribute('x2', W-36); vl2.setAttribute('y2','22');
+  vl2.setAttribute('stroke', isCrit ? '#e53e3e' : '#4a6fa5');
+  vl2.setAttribute('stroke-width','0.8');
+  g.appendChild(vl2);
+
+  // Vertical dividers in bottom row
+  const vl3 = createEl('line');
+  vl3.setAttribute('x1','36'); vl3.setAttribute('y1', H-22);
+  vl3.setAttribute('x2','36'); vl3.setAttribute('y2', H);
+  vl3.setAttribute('stroke', isCrit ? '#e53e3e' : '#4a6fa5');
+  vl3.setAttribute('stroke-width','0.8');
+  g.appendChild(vl3);
+  const vl4 = createEl('line');
+  vl4.setAttribute('x1', W-36); vl4.setAttribute('y1', H-22);
+  vl4.setAttribute('x2', W-36); vl4.setAttribute('y2', H);
+  vl4.setAttribute('stroke', isCrit ? '#e53e3e' : '#4a6fa5');
+  vl4.setAttribute('stroke-width','0.8');
+  g.appendChild(vl4);
+
+  // Text helpers
+  const textStyle = `font-family:'Microsoft YaHei',Arial,sans-serif;`;
+
+  // Top row: ES | dur | EF
+  addText(g, n.es, 18, 14, '10', isCrit ? '#c0392b' : '#4a6fa5', 'middle', textStyle+'font-weight:bold');
+  addText(g, n.dur+'d', W/2, 14, '10', isCrit ? '#c0392b' : '#2d3748', 'middle', textStyle+'font-weight:bold');
+  addText(g, n.ef, W-18, 14, '10', isCrit ? '#c0392b' : '#4a6fa5', 'middle', textStyle+'font-weight:bold');
+
+  // Middle: activity ID + name
+  addText(g, n.id, W/2, H/2 - 4, '10', isCrit ? '#c0392b' : '#2d6a9f', 'middle', textStyle+'font-weight:bold');
+  addText(g, n.name, W/2, H/2 + 9, '9.5', isCrit ? '#333' : '#333', 'middle', textStyle);
+
+  // Bottom row: LS | float | LF
+  addText(g, n.ls, 18, H - 7, '9.5', '#555', 'middle', textStyle);
+  const floatLabel = n.float === 0 ? '★0' : n.float;
+  addText(g, floatLabel, W/2, H - 7, '9.5', n.float === 0 ? '#e53e3e' : '#888', 'middle', textStyle+'font-weight:bold');
+  addText(g, n.lf, W-18, H - 7, '9.5', '#555', 'middle', textStyle);
+
+  svg.appendChild(g);
+});
+
+// Phase labels on top
+const phaseLabelsData = [
+  { label:'①项目启动', x:80,   color:'#2980b9' },
+  { label:'②系统设计', x:250,  color:'#27ae60' },
+  { label:'③后端开发', x:700,  color:'#e67e22' },
+  { label:'④前端开发', x:750,  color:'#8e44ad' },
+  { label:'⑤集成测试', x:1420, color:'#c0392b' },
+  { label:'⑥项目收尾', x:1830, color:'#2c3e50' },
+];
+
+// Draw column labels for ES timeline
+const timelineTicks = [0,2,5,7,9,10,11,13,17,20,22,24,25,27];
+const timelineXMap = {
+  0: 80, 2: 250, 5: 430, 7: 610, 9: 780, 10: 780,
+  11: 950, 13: 1140, 17: 1340, 20: 1500, 22: 1640,
+  24: 1760, 25: 1900, 27: 1990
+};
+
+/* ============================================================
+   WBS TABLE
+   ============================================================ */
+const tbody = document.getElementById('wbs-body');
+const phases = ['项目启动','系统设计','后端开发','前端开发','集成测试','项目收尾'];
+const phaseIndex = { '项目启动':1,'系统设计':2,'后端开发':3,'前端开发':4,'集成测试':5,'项目收尾':6 };
+const predLabels = {
+  A:'—', B:'A', C:'B',
+  D:'C', E:'C', F:'C',
+  M:'D', N:'M, E', O:'N', P:'N',
+  G:'F', H:'G', I:'G',
+  J:'H, I, E', K:'H, I, E', L:'H, I, E',
+  Q:'O, P, J, K, L', R:'Q', S:'R',
+  T:'S', U:'T'
+};
+
+let lastPhase = '';
+nodes.forEach(n => {
+  if (n.phase !== lastPhase) {
+    lastPhase = n.phase;
+    const hdr = document.createElement('tr');
+    hdr.className = 'phase-header';
+    hdr.innerHTML = `<td colspan="11">阶段 ${phaseIndex[n.phase]}：${n.phase}</td>`;
+    tbody.appendChild(hdr);
+  }
+  const tr = document.createElement('tr');
+  if (n.float === 0) tr.className = 'crit-row';
+  tr.innerHTML = `
+    <td><strong>${n.id}</strong></td>
+    <td style="text-align:left">${n.name}</td>
+    <td>${n.phase}</td>
+    <td>${n.dur}</td>
+    <td>${predLabels[n.id]}</td>
+    <td>${n.es}</td>
+    <td>${n.ef}</td>
+    <td>${n.ls}</td>
+    <td>${n.lf}</td>
+    <td class="${n.float===0?'float-zero':'float-pos'}">${n.float}</td>
+    <td>${n.float===0 ? '★ 是' : '否'}</td>
+  `;
+  tbody.appendChild(tr);
+});
+
+/* ============================================================
+   CRITICAL PATH LIST
+   ============================================================ */
+const cpList = document.getElementById('cp-list');
+const paths = [
+  { p: 'A → B → C → F → G → H → K → Q → R → S → T → U', len: '2+3+2+3+1+2+4+3+2+2+1+2 = 27天', note:'前端主路径①' },
+  { p: 'A → B → C → F → G → H → L → Q → R → S → T → U', len: '2+3+2+3+1+2+4+3+2+2+1+2 = 27天', note:'前端主路径②' },
+  { p: 'A → B → C → F → G → I → K → Q → R → S → T → U', len: '2+3+2+3+1+2+4+3+2+2+1+2 = 27天', note:'前端主路径③' },
+  { p: 'A → B → C → F → G → I → L → Q → R → S → T → U', len: '2+3+2+3+1+2+4+3+2+2+1+2 = 27天', note:'前端主路径④' },
+  { p: 'A → B → C → D → M → N → O → Q → R → S → T → U', len: '2+3+2+2+1+3+4+3+2+2+1+2 = 27天', note:'后端主路径' },
+];
+paths.forEach(({p, len, note}) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<span class="cp-path">${p}</span><span class="cp-tag">${note}</span><br>
+    <small style="color:#777;margin-left:4px">工期：${len}</small>`;
+  cpList.appendChild(li);
+});
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function createEl(tag) {
+  return document.createElementNS('http://www.w3.org/2000/svg', tag);
+}
+function addText(parent, content, x, y, fontSize, fill, anchor, style) {
+  const t = createEl('text');
+  t.setAttribute('x', x);
+  t.setAttribute('y', y);
+  t.setAttribute('font-size', fontSize);
+  t.setAttribute('fill', fill);
+  t.setAttribute('text-anchor', anchor || 'middle');
+  t.setAttribute('style', style || '');
+  t.textContent = content;
+  parent.appendChild(t);
+  return t;
+}
+</script>
+</body>
+</html>
