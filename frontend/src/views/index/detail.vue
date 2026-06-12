@@ -446,7 +446,7 @@ const sortCommentList = (sortType) => {
       border-radius: 2px;
       font-weight: 500;
       font-size: 12px;
-      color: #4684e2;
+      color: var(--nm-primary);
       text-align: center;
     }
 
@@ -536,7 +536,7 @@ const sortCommentList = (sortType) => {
     margin-top: 16px;
 
     .category-box {
-      color: #152844;
+      color: var(--nm-text-main);
       font-size: 14px;
 
       .title {
@@ -579,7 +579,7 @@ const sortCommentList = (sortType) => {
 
   .count-box {
     position: relative;
-    border-bottom: 1px solid #cedce4;
+    border-bottom: 1px solid var(--nm-border);
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
@@ -596,7 +596,7 @@ const sortCommentList = (sortType) => {
     font-size: 0;
 
     .count-title {
-      color: #152844;
+      color: var(--nm-text-main);
       font-weight: 600;
       font-size: 16px;
       line-height: 18px;
@@ -609,7 +609,7 @@ const sortCommentList = (sortType) => {
     font-weight: 600;
     font-size: 20px;
     line-height: 24px;
-    color: #152844;
+    color: var(--nm-text-main);
   }
 }
 
@@ -655,7 +655,7 @@ const sortCommentList = (sortType) => {
     font-size: 18px;
     height: 26px;
     line-height: 26px;
-    color: #152844;
+    color: var(--nm-text-main);
     margin-bottom: 12px;
   }
 }
@@ -681,7 +681,7 @@ const sortCommentList = (sortType) => {
 }
 
 .main-tab {
-  border-bottom: 1px solid #cedce4;
+  border-bottom: 1px solid var(--nm-border);
 }
 
 .order-view {
@@ -697,13 +697,13 @@ const sortCommentList = (sortType) => {
   .tab {
     margin-right: 20px;
     cursor: pointer;
-    color: #5f77a6;
+    color: var(--nm-text-sub);
     font-size: 16px;
     cursor: pointer;
   }
 
   .tab-select {
-    color: #152844;
+    color: var(--nm-text-main);
     font-weight: 600;
   }
 
@@ -713,7 +713,7 @@ const sortCommentList = (sortType) => {
     left: 84px;
     width: 16px;
     height: 4px;
-    background: #4684e2;
+    background: var(--nm-primary);
     -webkit-transition: left .3s;
     transition: left .3s;
   }
@@ -729,12 +729,12 @@ const sortCommentList = (sortType) => {
     font-weight: 600;
     font-size: 18px;
     line-height: 26px;
-    color: #152844;
+    color: var(--nm-text-main);
     margin-bottom: 12px;
   }
 
   .things {
-    border-top: 1px solid #cedce4;
+    border-top: 1px solid var(--nm-border);
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -875,7 +875,7 @@ const sortCommentList = (sortType) => {
     //    }
     //
     //    .translators {
-    //      color: #6f6f6f;
+    //      color: var(--nm-text-sub);
     //      font-size: 12px;
     //      line-height: 14px;
     //      margin-top: 4px;
@@ -899,7 +899,7 @@ const sortCommentList = (sortType) => {
     font-size: 14px;
     line-height: 22px;
     height: 22px;
-    color: #152844;
+    color: var(--nm-text-main);
     margin: 24px 0 12px;
   }
 
@@ -971,13 +971,13 @@ const sortCommentList = (sortType) => {
     }
 
     .tab-box {
-      color: #5f77a6;
+      color: var(--nm-text-sub);
       -webkit-box-align: center;
       -ms-flex-align: center;
       align-items: center;
 
       .tab-select {
-        color: #152844;
+        color: var(--nm-text-main);
       }
 
       span {
@@ -989,7 +989,7 @@ const sortCommentList = (sortType) => {
       width: 1px;
       height: 12px;
       margin: 0 12px;
-      background: #cedce4;
+      background: var(--nm-border);
     }
   }
 }
@@ -1021,7 +1021,7 @@ const sortCommentList = (sortType) => {
       }
 
       .name {
-        color: #152844;
+        color: var(--nm-text-main);
         font-weight: 600;
         font-size: 14px;
         line-height: 22px;
@@ -1030,7 +1030,7 @@ const sortCommentList = (sortType) => {
       }
 
       .time {
-        color: #5f77a6;
+        color: var(--nm-text-sub);
         font-size: 12px;
         line-height: 16px;
         height: 16px;
@@ -1038,7 +1038,7 @@ const sortCommentList = (sortType) => {
       }
 
       .float-right {
-        color: #4684e2;
+        color: var(--nm-primary);
         font-size: 14px;
         float: right;
 
@@ -1048,7 +1048,7 @@ const sortCommentList = (sortType) => {
         }
 
         .num {
-          color: #152844;
+          color: var(--nm-text-main);
           margin-left: 6px;
           cursor: auto;
         }
@@ -1063,7 +1063,7 @@ const sortCommentList = (sortType) => {
   font-size: 14px;
   line-height: 22px;
   padding-bottom: 16px;
-  border-bottom: 1px dashed #cedce4;
+  border-bottom: 1px dashed var(--nm-border);
   margin-left: 52px;
   overflow: hidden;
   word-break: break-word;

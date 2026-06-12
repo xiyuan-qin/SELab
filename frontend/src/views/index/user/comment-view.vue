@@ -78,13 +78,13 @@ const getCommentList =()=> {
   flex: 1;
 
   .list-title {
-    color: #152844;
+    color: var(--nm-text-main);
     font-weight: 600;
     font-size: 18px;
     //line-height: 24px;
     height: 48px;
     margin-bottom: 4px;
-    border-bottom: 1px solid #cedce4;
+    border-bottom: 1px solid var(--nm-border);
   }
 }
 
@@ -120,7 +120,7 @@ const getCommentList =()=> {
     }
 
     h3 {
-      color: #152844;
+      color: var(--nm-text-main);
       font-weight: 600;
       font-size: 14px;
       margin: 0;
@@ -137,7 +137,7 @@ const getCommentList =()=> {
     }
 
     .time {
-      color: #5f77a6;
+      color: var(--nm-text-sub);
       font-size: 12px;
       line-height: 16px;
       height: 16px;

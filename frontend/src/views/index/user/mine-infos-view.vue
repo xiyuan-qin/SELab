@@ -1,87 +1,43 @@
 <template>
-  <div class="mine-infos-view">
-    <div class="info-box flex-view">
-      <img :src="AvatarImg" class="avatar-img">
-      <div class="name-box">
-        <h2 class="nick">{{ userStore.user_name }}</h2>
-        <div class="age">
-          <span>已入坑1天</span>
-          <span class="give-point"></span>
-        </div>
+  <div class="mine-infos-view nm-card">
+    <!-- 头像 + 身份 -->
+    <div class="profile">
+      <img :src="AvatarImg" class="avatar">
+      <div class="meta">
+        <h2 class="nick">{{ userStore.user_name || '未登录' }}</h2>
+        <span class="nm-role-badge" :class="userStore.isHr ? 'is-hr' : 'is-seeker'">
+          {{ userStore.isHr ? '工头 · 招聘方' : '牛马 · 求职者' }}
+        </span>
       </div>
     </div>
-    <div class="counts-view">
-      <div class="counts flex-view">
-        <div class="fans-box flex-item" @click="clickMenu('collectThingView')">
-          <div class="text">收藏的坑</div>
-          <div class="num">{{collectCount}}</div>
-        </div>
-        <div class="split-line">
-        </div>
-        <div class="follow-box flex-item" @click="clickMenu('wishThingView')">
-          <div class="text">梦想的坑</div>
-          <div class="num">{{wishCount}}</div>
-        </div>
-<!--        <div class="split-line">-->
-<!--        </div>-->
-<!--        <div class="points-box flex-item">-->
-<!--          <div class="text">积分</div>-->
-<!--          <div class="num">0</div>-->
-<!--        </div>-->
+
+    <!-- 求职者：两个小统计 -->
+    <div v-if="!userStore.isHr" class="stat-row">
+      <div class="stat" @click="go('collectThingView')">
+        <div class="num">{{ collectCount }}</div>
+        <div class="text">收藏的坑</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat" @click="go('wishThingView')">
+        <div class="num">{{ wishCount }}</div>
+        <div class="text">心仪的坑</div>
       </div>
     </div>
-    <div class="order-box">
-      <div class="title">坑马指挥部</div>
-      <div class="list">
-        <div class="mine-item flex-view" @click="clickMenu('companyPostView')">
-          <img :src="CommentIconImg">
-          <span>待宰名单</span>
-          </div>
-          <div class="mine-item flex-view" @click="clickMenu('myThingView')">
-          <img :src="CommentIconImg">
-          <span>坑位管理</span>
-          </div>
-          <div class="mine-item flex-view" @click="clickMenu('myCompanyView')">
-          <img :src="CommentIconImg">
-          <span>老板档案</span>
-        </div>
-      </div>
-    </div>
-    <div class="order-box">
-      <div class="title">牛马作战室</div>
-      <div class="list">
-        <div class="mine-item flex-view" @click="clickMenu('myPostView')">
-          <img :src="SettingIconImage" alt="编辑资料">
-          <span>我的跳坑记录</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('resumeEditView')">
-          <img :src="SettingIconImage" alt="编辑资料">
-          <span>我的卖身契</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('commentView')">
-          <img :src="SettingIconImage">
-          <span>我的踩坑日记</span>
-        </div>
-      </div>
-    </div>
-    <div class="setting-box">
-      <div class="title">牛马档案</div>
-      <div class="list">
-        <div class="mine-item flex-view" @click="clickMenu('userInfoEditView')">
-          <img :src="SettingIconImage" alt="编辑资料">
-          <span>修改卖身条件</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('securityView')">
-          <img :src="SafeIconImage" alt="账号安全">
-          <span>防止被卖号</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('pushView')">
-          <img :src="PushIconImage" alt="推送设置">
-          <span>催命通知设置</span>
-        </div>
-        <div class="mine-item flex-view" @click="clickMenu('messageView')">
-          <img :src="MessageIconImage" alt="消息管理">
-          <span>催命消息管理</span>
+
+    <!-- 角色化菜单 -->
+    <div v-for="group in menus" :key="group.title" class="menu-group">
+      <div class="group-title">{{ group.title }}</div>
+      <div
+        v-for="item in group.items"
+        :key="item.name"
+        class="menu-item"
+        :class="{ active: route.name === item.name }"
+        @click="go(item.name)"
+      >
+        <span class="dot"></span>
+        <div class="labels">
+          <span class="main">{{ item.label }}</span>
+          <span class="sub">{{ item.sub }}</span>
         </div>
       </div>
     </div>
@@ -89,291 +45,156 @@
 </template>
 
 <script setup lang="ts">
+import { computed, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import AvatarImg from '/@/assets/images/avatar.jpg'
-import MyOrderImg from '/@/assets/images/order-icon.svg'
-import CommentIconImg from '/@/assets/images/order-thing-icon.svg'
-import AddressIconImage from '/@/assets/images/order-address-icon.svg'
-import PointIconImage from '/@/assets/images/order-point-icon.svg'
-import SettingIconImage from '/@/assets/images/setting-icon.svg'
-import SafeIconImage from '/@/assets/images/setting-safe-icon.svg'
-import PushIconImage from '/@/assets/images/setting-push-icon.svg'
-import MessageIconImage from '/@/assets/images/setting-msg-icon.svg'
+import { getCollectThingListApi, getWishThingListApi } from '/@/api/index/thing'
+import { useUserStore } from '/@/store';
 
-import {getCollectThingListApi} from '/@/api/index/thing'
-import {getWishThingListApi} from '/@/api/index/thing'
-import {useUserStore} from '/@/store';
 const userStore = useUserStore();
 const router = useRouter();
+const route = useRoute();
 
+const collectCount = ref(0)
+const wishCount = ref(0)
 
-let collectCount = ref(0)
-let wishCount = ref(0)
+// 招聘方菜单
+const HR_MENUS = [
+  {
+    title: '招聘指挥部',
+    items: [
+      { name: 'myThingView', label: '坑位管理', sub: '我发布的职位' },
+      { name: 'companyPostView', label: '待宰名单', sub: '收到的简历投递' },
+      { name: 'myCompanyView', label: '老板档案', sub: '公司信息维护' },
+    ],
+  },
+  {
+    title: '账号',
+    items: [
+      { name: 'userInfoEditView', label: '工头设置', sub: '修改资料' },
+      { name: 'securityView', label: '账号安全', sub: '改密码防被卖' },
+    ],
+  },
+]
 
-onMounted(()=>{
-  getCollectThingList()
-  getWishThingList()
+// 求职者菜单
+const SEEKER_MENUS = [
+  {
+    title: '牛马作战室',
+    items: [
+      { name: 'resumeEditView', label: '我的卖身契', sub: '编辑简历' },
+      { name: 'myPostView', label: '跳坑记录', sub: '我的投递' },
+      { name: 'commentView', label: '踩坑日记', sub: '我的评论' },
+    ],
+  },
+  {
+    title: '账号',
+    items: [
+      { name: 'userInfoEditView', label: '牛马设置', sub: '修改资料' },
+      { name: 'securityView', label: '账号安全', sub: '改密码防被卖' },
+    ],
+  },
+]
+
+const menus = computed(() => (userStore.isHr ? HR_MENUS : SEEKER_MENUS))
+
+const go = (name: string) => router.push({ name })
+
+onMounted(() => {
+  if (userStore.isHr) return
+  const username = userStore.user_name
+  getCollectThingListApi({ username }).then((res: any) => (collectCount.value = res.data.length)).catch(() => {})
+  getWishThingListApi({ username }).then((res: any) => (wishCount.value = res.data.length)).catch(() => {})
 })
-
-const clickMenu =(name)=> {
-  router.push({name: name})
-}
-const getCollectThingList =()=> {
-  let username = userStore.user_name
-  getCollectThingListApi({username: username}).then(res => {
-    collectCount.value = res.data.length
-  }).catch(err => {
-    console.log(err.msg)
-  })
-}
-
-const getWishThingList =()=> {
-  let username = userStore.user_name
-  getWishThingListApi({username: username}).then(res => {
-    wishCount.value = res.data.length
-  }).catch(err => {
-    console.log(err.msg)
-  })
-}
-
 </script>
 
 <style scoped lang="less">
-.flex-view {
-  display: flex;
+.mine-infos-view {
+  width: 248px;
+  flex-shrink: 0;
+  padding: 20px 16px;
+  height: fit-content;
 }
 
-.mine-infos-view {
-  width: 235px;
-  margin-right: 20px;
-  border: 1px solid #cedce4;
-  height: fit-content;
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--nm-border);
 
-  .info-box {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    padding: 16px 16px 0;
-    overflow: hidden;
-  }
-
-  .avatar-img {
-    width: 48px;
-    height: 48px;
-    margin-right: 16px;
+  .avatar {
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--nm-border);
   }
+  .nick {
+    margin: 0 0 6px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--nm-text-main);
+    line-height: 1.2;
+    word-break: break-all;
+  }
+}
 
-  .name-box {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
+.stat-row {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--nm-border);
+
+  .stat {
     flex: 1;
-    overflow: hidden;
-
-    .nick {
-      color: #152844;
-      font-weight: 600;
-      font-size: 18px;
-      line-height: 24px;
-      height: 24px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin: 0;
-      overflow: hidden;
-    }
-
-    .age {
-      font-size: 12px;
-      color: #6f6f6f;
-      height: 16px;
-      line-height: 16px;
-      margin-top: 8px;
-    }
-
-    .give-point {
-      color: #4684e2;
-      cursor: pointer;
-      float: right;
-    }
-  }
-
-  .counts-view {
-    border: none;
-    padding: 16px;
-  }
-
-  .counts {
-    margin-top: 12px;
     text-align: center;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-
-    .flex-item {
-      -webkit-box-flex: 1;
-      -ms-flex: 1;
-      flex: 1;
-      cursor: pointer;
-    }
-
-    .text {
-      height: 16px;
-      line-height: 16px;
-      color: #6f6f6f;
-    }
-
-    .num {
-      height: 18px;
-      line-height: 18px;
-      color: #152844;
-      font-weight: 600;
-      font-size: 14px;
-      margin-top: 4px;
-    }
-
-    .split-line {
-      width: 1px;
-      height: 24px;
-      background: #dae6f9;
-    }
-  }
-
-  .intro-box {
-    border-top: 1px solid #cedce4;
-    padding: 16px;
-
-    .title {
-      color: #6f6f6f;
-      font-size: 12px;
-      line-height: 16px;
-    }
-
-    .intro-content {
-      color: #152844;
-      font-size: 14px;
-      line-height: 20px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin: 8px 0;
-    }
-  }
-
-  .create-box {
     cursor: pointer;
-    border-top: 1px solid #cedce4;
-    padding: 16px;
+    .num { font-size: 18px; font-weight: 700; color: var(--nm-text-main); }
+    .text { font-size: 12px; color: var(--nm-text-sub); margin-top: 2px; }
+    &:hover .num { color: var(--nm-primary); }
+  }
+  .stat-divider { width: 1px; height: 28px; background: var(--nm-border); }
+}
 
-    .title {
-      position: relative;
-      color: #152844;
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 18px;
-      height: 18px;
-    }
+.menu-group {
+  margin-top: 16px;
 
-    .counts {
-      margin-top: 12px;
-      text-align: center;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
-
-      .flex-item {
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
-        flex: 1;
-        cursor: pointer;
-      }
-
-      .split-line {
-        width: 1px;
-        height: 24px;
-        background: #dae6f9;
-      }
-    }
+  .group-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--nm-text-muted);
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    padding-left: 4px;
   }
 
-  .order-box {
-    border-top: 1px solid #cedce4;
-    padding: 16px;
+  .menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--nm-radius);
+    cursor: pointer;
+    transition: background 0.15s;
 
-    .title {
-      color: #152844;
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 18px;
-      height: 18px;
-      margin-bottom: 8px;
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--nm-border-dark);
+      flex-shrink: 0;
+      transition: background 0.15s;
     }
+    .labels { display: flex; flex-direction: column; line-height: 1.3; }
+    .main { font-size: 14px; color: var(--nm-text-main); font-weight: 500; }
+    .sub { font-size: 11px; color: var(--nm-text-muted); }
 
-    .list {
-      padding-left: 16px;
-
-      .mine-item {
-        border-top: 1px dashed #cedce4;
-        cursor: pointer;
-        height: 48px;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        align-items: center;
-
-        img {
-          width: 24px;
-          margin-right: 8px;
-          height: 24px;
-        }
-
-        span {
-          color: #152844;
-          font-size: 14px;
-        }
-      }
-
-      .mine-item:first-child {
-        border: none;
-      }
-    }
-  }
-
-  .setting-box {
-    border-top: 1px solid #cedce4;
-    padding: 16px;
-
-    .title {
-      color: #152844;
-      font-weight: 600;
-      font-size: 14px;
-      line-height: 18px;
-      height: 18px;
-      margin-bottom: 8px;
-    }
-
-    .list {
-      padding-left: 16px;
-    }
-
-    .mine-item {
-      border-top: 1px dashed #cedce4;
-      cursor: pointer;
-      height: 48px;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
-
-      img {
-        width: 24px;
-        margin-right: 8px;
-        height: 24px;
-      }
-
-      span {
-        color: #152844;
-        font-size: 14px;
-      }
-    }
-
-    .mine-item:first-child {
-      border: none;
+    &:hover { background: var(--nm-bg-soft); }
+    &.active {
+      background: var(--nm-bg-soft);
+      .dot { background: var(--nm-primary); }
+      .main { color: var(--nm-primary); }
     }
   }
 }

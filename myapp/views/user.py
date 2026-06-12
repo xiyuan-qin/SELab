@@ -42,13 +42,19 @@ def register(request):
     if User.objects.filter(username=username).exists():
         return error('该账号已被注册')
 
+    # 身份：求职者 user / 招聘方 hr，非法值一律按求职者
+    role = request.POST.get('role', 'user')
+    if role not in ('user', 'hr'):
+        role = 'user'
+
     user = User.objects.create(
         username=username,
         password=make_password(password),
         nickname=username,
+        role=role,
         token=make_token(),
     )
-    return success({'id': user.id, 'username': user.username}, '注册成功')
+    return success({'id': user.id, 'username': user.username, 'role': user.role}, '注册成功')
 
 
 def info(request):

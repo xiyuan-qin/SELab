@@ -1,58 +1,48 @@
 <template>
-  <div class="user">
-
+  <div class="nm-page user-center">
     <Header />
 
-    <div class="user-content">
-      <div class="user-content-left">
+    <div class="nm-container user-content">
+      <aside class="left">
         <MineInfosView />
-      </div>
-      <div class="user-content-right">
+      </aside>
+      <main class="right nm-card">
         <router-view />
-      </div>
+      </main>
     </div>
 
     <Footer />
-
   </div>
 </template>
-<script>
+
+<script setup lang="ts">
 import Header from '/@/views/index/components/header.vue'
 import Footer from '/@/views/index/components/footer.vue'
 import MineInfosView from '/@/views/index/user/mine-infos-view.vue'
-
-export default {
-  components: {
-    MineInfosView,
-    Footer,
-    Header
-  },
-  data () {
-    return {
-      collapsed: false
-    }
-  }
-}
 </script>
-<style scoped lang="less">
 
-.user {
-  display: block;
+<style scoped lang="less">
+.user-center {
+  display: flex;
+  flex-direction: column;
 }
 
 .user-content {
   display: flex;
   flex-direction: row;
-  //background-color: #2a9a44;
-  max-width: 1200px;
-  min-width: 800px;
-  margin: 80px auto;
-  .user-content-left {
-  }
-  .user-content-right{
-     flex: 1;
-    padding-right: 20px;
-  }
+  align-items: flex-start;
+  gap: 20px;
+  padding-top: 28px;
+  padding-bottom: 48px;
 
+  .left {
+    flex-shrink: 0;
+  }
+  .right {
+    flex: 1;
+    min-width: 0;
+    padding: 24px 28px;
+    min-height: 520px;
+  }
 }
 </style>

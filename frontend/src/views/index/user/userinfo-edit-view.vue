@@ -150,37 +150,34 @@ input, textarea {
 }
 
 .content-list {
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
   flex: 1;
 
   .list-title {
-    color: #152844;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 48px;
-    height: 48px;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #cedce4;
+    color: var(--nm-text-main);
+    font-weight: 700;
+    font-size: var(--nm-fs-lg);
+    line-height: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--nm-border);
   }
 
   .edit-view {
     .item {
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
-      margin: 24px 0;
+      display: flex;
+      align-items: flex-start;
+      margin: 22px 0;
 
       .label {
-        width: 100px;
-        color: #152844;
+        width: 96px;
+        padding-top: 10px;
+        color: var(--nm-text-sub);
         font-weight: 600;
-        font-size: 14px;
+        font-size: var(--nm-fs-base);
+        flex-shrink: 0;
       }
 
       .right-box {
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
         flex: 1;
       }
 
@@ -189,90 +186,80 @@ input, textarea {
         height: 64px;
         border-radius: 50%;
         margin-right: 16px;
+        border: 2px solid var(--nm-border);
       }
 
       .change-tips {
-        -webkit-box-align: center;
-        -ms-flex-align: center;
+        display: flex;
         align-items: center;
-        -ms-flex-wrap: wrap;
         flex-wrap: wrap;
       }
 
       label {
-        color: #4684e2;
-        font-size: 14px;
+        color: var(--nm-primary);
+        font-size: var(--nm-fs-base);
         line-height: 22px;
-        height: 22px;
         cursor: pointer;
-        width: 100px;
         display: block;
-      }
-
-      .tip {
-        color: #6f6f6f;
-        font-size: 14px;
-        height: 22px;
-        line-height: 22px;
-        margin: 0;
-        width: 100%;
-      }
-
-      .right-box {
-        -webkit-box-flex: 1;
-        -ms-flex: 1;
-        flex: 1;
+        font-weight: 600;
       }
 
       .input-dom {
         width: 400px;
-      }
-
-      .input-dom {
-        background: #f8fafb;
-        border-radius: 4px;
+        max-width: 100%;
+        background: var(--nm-bg-soft);
+        border: 1px solid var(--nm-border);
+        border-radius: var(--nm-radius);
         height: 40px;
         line-height: 40px;
-        font-size: 14px;
-        color: #152844;
+        font-size: var(--nm-fs-base);
+        color: var(--nm-text-main);
         padding: 0 12px;
+        transition: border-color 0.2s;
+        &:focus { border-color: var(--nm-primary); background: #fff; }
       }
 
       .tip {
-        font-size: 12px;
+        font-size: var(--nm-fs-xs);
         line-height: 16px;
-        color: #6f6f6f;
-        height: 16px;
-        margin-top: 4px;
+        color: var(--nm-text-muted);
+        margin-top: 6px;
       }
 
       .intro {
         resize: none;
-        background: #f8fafb;
+        background: var(--nm-bg-soft);
+        border: 1px solid var(--nm-border);
+        border-radius: var(--nm-radius);
         width: 100%;
         padding: 8px 12px;
-        height: 82px;
+        height: 90px;
         line-height: 22px;
-        font-size: 14px;
-        color: #152844;
+        font-size: var(--nm-fs-base);
+        color: var(--nm-text-main);
+        transition: border-color 0.2s;
+        &:focus { border-color: var(--nm-primary); background: #fff; }
       }
     }
 
     .save {
-      background: #4684e2;
-      border-radius: 32px;
-      width: 96px;
-      height: 32px;
-      line-height: 32px;
-      font-size: 14px;
+      background: var(--nm-primary);
+      border-radius: var(--nm-radius);
+      width: 110px;
+      height: 40px;
+      line-height: 40px;
+      font-size: var(--nm-fs-base);
+      font-weight: 600;
       color: #fff;
       border: none;
       outline: none;
       cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      &:hover { background: var(--nm-primary-hover); transform: translateY(-1px); }
     }
 
     .mg {
-      margin-left: 100px;
+      margin-left: 96px;
     }
   }
 }

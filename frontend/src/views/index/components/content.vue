@@ -233,11 +233,11 @@ li {
 }
 
 .child:hover {
-  color: #4684e2;
+  color: var(--nm-primary);
 }
 
 .select {
-  color: #4684e2;
+  color: var(--nm-primary);
 }
 
 .flex-view {
@@ -252,7 +252,7 @@ li {
 }
 
 .name:hover {
-  color: #4684e2;
+  color: var(--nm-primary);
 }
 
 .count {
@@ -352,8 +352,8 @@ li {
       -webkit-box-flex: 1;
       -ms-flex: 1;
       flex: 1;
-      border-bottom: 1px solid #cedce4;
-      color: #152844;
+      border-bottom: 1px solid var(--nm-border);
+      color: var(--nm-text-main);
       font-size: 14px;
       height: 22px;
       line-height: 22px;
@@ -373,7 +373,7 @@ li {
       border: none;
       font-size: 14px;
       color: #fff;
-      background: #288dda;
+      background: var(--nm-primary);
       border-radius: 32px;
       width: 88px;
       height: 32px;
@@ -406,7 +406,7 @@ li {
       position: relative;
       font-weight: 400;
       font-size: 18px;
-      color: #5f77a6;
+      color: var(--nm-text-sub);
 
       .type-tab {
         margin-right: 32px;
@@ -414,7 +414,7 @@ li {
       }
 
       .type-tab-select {
-        color: #152844;
+        color: var(--nm-text-main);
         font-weight: 600;
         font-size: 20px;
       }

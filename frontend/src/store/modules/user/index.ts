@@ -3,51 +3,58 @@ import {loginApi as adminLogin} from '/@/api/admin/user';
 import {userLoginApi} from '/@/api/index/user';
 import { setToken, clearToken } from '/@/utils/auth';
 import { UserState } from './types';
-import {USER_ID, USER_NAME, USER_TOKEN, ADMIN_USER_ID,ADMIN_USER_NAME,ADMIN_USER_TOKEN} from "/@/store/constants";
+import {USER_ID, USER_NAME, USER_TOKEN, USER_ROLE, ADMIN_USER_ID,ADMIN_USER_NAME,ADMIN_USER_TOKEN} from "/@/store/constants";
 
 export const useUserStore = defineStore('user', {
+  // 从 localStorage 初始化，保证刷新后登录态/角色不丢
   state: (): UserState => ({
-    user_id: undefined,
-    user_name: undefined,
-    user_token: undefined,
+    user_id: localStorage.getItem(USER_ID) || undefined,
+    user_name: localStorage.getItem(USER_NAME) || undefined,
+    user_token: localStorage.getItem(USER_TOKEN) || undefined,
+    user_role: localStorage.getItem(USER_ROLE) || undefined,
 
-    admin_user_id: undefined,
-    admin_user_name: undefined,
-    admin_user_token: undefined,
+    admin_user_id: localStorage.getItem(ADMIN_USER_ID) || undefined,
+    admin_user_name: localStorage.getItem(ADMIN_USER_NAME) || undefined,
+    admin_user_token: localStorage.getItem(ADMIN_USER_TOKEN) || undefined,
   }),
-  getters: {},
+  getters: {
+    // 是否招聘方
+    isHr: (state) => state.user_role === 'hr',
+    isLogin: (state) => !!state.user_token,
+  },
   actions: {
     // 用户登录
     async login(loginForm) {
       const result = await userLoginApi(loginForm);
-      console.log('result==>', result)
 
       if(result.code === 0) {
         this.$patch((state)=>{
           state.user_id = result.data.id
           state.user_name = result.data.username
           state.user_token = result.data.token
-          console.log('state==>', state)
+          state.user_role = result.data.role || 'user'
         })
 
         localStorage.setItem(USER_TOKEN, result.data.token)
         localStorage.setItem(USER_NAME, result.data.username)
         localStorage.setItem(USER_ID, result.data.id)
+        localStorage.setItem(USER_ROLE, result.data.role || 'user')
       }
 
       return result;
     },
     // 用户登出
     async logout() {
-      // await userLogout();
       this.$patch((state)=>{
         localStorage.removeItem(USER_ID)
         localStorage.removeItem(USER_NAME)
         localStorage.removeItem(USER_TOKEN)
+        localStorage.removeItem(USER_ROLE)
 
         state.user_id = undefined
         state.user_name = undefined
         state.user_token = undefined
+        state.user_role = undefined
       })
     },
 

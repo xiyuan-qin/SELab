@@ -225,13 +225,13 @@ input, textarea {
   flex: 1;
 
   .list-title {
-    color: #152844;
+    color: var(--nm-text-main);
     font-weight: 600;
     font-size: 18px;
     line-height: 48px;
     height: 48px;
     margin-bottom: 4px;
-    border-bottom: 1px solid #cedce4;
+    border-bottom: 1px solid var(--nm-border);
   }
 
   .edit-view {
@@ -243,7 +243,7 @@ input, textarea {
 
       .label {
         width: 100px;
-        color: #152844;
+        color: var(--nm-text-main);
         font-weight: 600;
         font-size: 14px;
       }
@@ -270,7 +270,7 @@ input, textarea {
       }
 
       label {
-        color: #4684e2;
+        color: var(--nm-primary);
         font-size: 14px;
         line-height: 22px;
         height: 22px;
@@ -280,7 +280,7 @@ input, textarea {
       }
 
       .tip {
-        color: #6f6f6f;
+        color: var(--nm-text-sub);
         font-size: 14px;
         height: 22px;
         line-height: 22px;
@@ -299,37 +299,37 @@ input, textarea {
       }
 
       .input-dom {
-        background: #f8fafb;
+        background: var(--nm-bg-soft);
         border-radius: 4px;
         height: 40px;
         line-height: 40px;
         font-size: 14px;
-        color: #152844;
+        color: var(--nm-text-main);
         padding: 0 12px;
       }
 
       .tip {
         font-size: 12px;
         line-height: 16px;
-        color: #6f6f6f;
+        color: var(--nm-text-sub);
         height: 16px;
         margin-top: 4px;
       }
 
       .intro {
         resize: none;
-        background: #f8fafb;
+        background: var(--nm-bg-soft);
         width: 100%;
         padding: 8px 12px;
         height: 82px;
         line-height: 22px;
         font-size: 14px;
-        color: #152844;
+        color: var(--nm-text-main);
       }
     }
 
     .save {
-      background: #4684e2;
+      background: var(--nm-primary);
       border-radius: 32px;
       width: 96px;
       height: 32px;

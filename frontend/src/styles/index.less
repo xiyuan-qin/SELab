@@ -10,6 +10,11 @@
   --nm-accent: #dc2626;
   --nm-accent-light: #fca5a5;
 
+  // 招聘方身份色 - 钢蓝（与求职者橙区分）
+  --nm-hr: #2563eb;
+  --nm-hr-hover: #1d4ed8;
+  --nm-hr-soft: #eff6ff;
+
   // 文字色
   --nm-text-main: #1c1917;
   --nm-text-sub: #78716c;
@@ -31,12 +36,29 @@
 
   // 圆角 - 更工业化
   --nm-radius-sm: 2px;
-  --nm-radius: 4px;
+  --nm-radius: 8px;
+  --nm-radius-lg: 14px;
   --nm-radius-pill: 999px;
 
   // 阴影
   --nm-shadow: 0 2px 12px rgba(0,0,0,0.08);
   --nm-shadow-md: 0 4px 24px rgba(0,0,0,0.12);
+
+  // 间距尺度
+  --nm-space-1: 4px;
+  --nm-space-2: 8px;
+  --nm-space-3: 12px;
+  --nm-space-4: 16px;
+  --nm-space-5: 24px;
+  --nm-space-6: 32px;
+
+  // 字号尺度
+  --nm-fs-xs: 12px;
+  --nm-fs-sm: 13px;
+  --nm-fs-base: 14px;
+  --nm-fs-md: 16px;
+  --nm-fs-lg: 20px;
+  --nm-fs-xl: 28px;
 }
 
 // 全局基础
@@ -76,4 +98,118 @@ a:hover {
 ::selection {
   background: var(--nm-primary);
   color: #fff;
+}
+
+// ============================================
+// 全站公共类（全部页面复用，避免再硬编码颜色/宽度）
+// ============================================
+
+// 定宽容器
+.nm-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
+// 卡片
+.nm-card {
+  background: var(--nm-bg-card);
+  border: 1px solid var(--nm-border);
+  border-radius: var(--nm-radius-lg);
+  box-shadow: var(--nm-shadow);
+  transition: box-shadow 0.2s, transform 0.15s, border-color 0.2s;
+}
+.nm-card-hover:hover {
+  box-shadow: var(--nm-shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--nm-primary);
+}
+
+// 区块标题
+.nm-section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--nm-space-2);
+  font-size: var(--nm-fs-md);
+  font-weight: 700;
+  color: var(--nm-text-main);
+  margin-bottom: var(--nm-space-4);
+  &::before {
+    content: '';
+    width: 4px;
+    height: 16px;
+    border-radius: 2px;
+    background: var(--nm-primary);
+  }
+}
+
+// 页面外壳（暖奶白底 + 顶栏留白）
+.nm-page {
+  min-height: 100vh;
+  background: var(--nm-bg);
+  padding-top: 56px; // 让位固定顶栏
+}
+
+// 按钮
+.nm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nm-space-2);
+  height: 38px;
+  padding: 0 18px;
+  border: none;
+  border-radius: var(--nm-radius);
+  font-size: var(--nm-fs-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, opacity 0.2s;
+  &:active { transform: translateY(1px); }
+}
+.nm-btn-primary {
+  background: var(--nm-primary);
+  color: #fff;
+  &:hover { background: var(--nm-primary-hover); }
+}
+.nm-btn-hr {
+  background: var(--nm-hr);
+  color: #fff;
+  &:hover { background: var(--nm-hr-hover); }
+}
+.nm-btn-ghost {
+  background: transparent;
+  border: 1px solid var(--nm-border);
+  color: var(--nm-text-sub);
+  &:hover { border-color: var(--nm-primary); color: var(--nm-primary); }
+}
+
+// 标签
+.nm-tag {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--nm-radius-pill);
+  font-size: var(--nm-fs-xs);
+  font-weight: 500;
+  background: var(--nm-bg-soft);
+  color: var(--nm-text-sub);
+}
+.nm-tag-primary { background: #fff1ea; color: var(--nm-primary); }
+.nm-tag-hr { background: var(--nm-hr-soft); color: var(--nm-hr); }
+
+// 角色徽章
+.nm-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 12px;
+  border-radius: var(--nm-radius-pill);
+  font-size: var(--nm-fs-xs);
+  font-weight: 600;
+  &.is-seeker { background: #fff1ea; color: var(--nm-primary); }
+  &.is-hr { background: var(--nm-hr-soft); color: var(--nm-hr); }
 }

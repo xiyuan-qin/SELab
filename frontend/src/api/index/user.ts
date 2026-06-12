@@ -20,7 +20,7 @@ export interface LoginData {
 
 const detailApi = async (params: any) => get<any>({ url: URL.detail, params: params, data: {}, headers: {} });
 const userLoginApi = async (data: LoginData) => post<any>({ url: URL.userLogin, data, headers: { 'Content-Type': 'multipart/form-data;charset=utf-8' } });
-const userRegisterApi = async (data: any) => post<any>({ url: URL.userRegister, params: {}, data: data });
+const userRegisterApi = async (data: any) => post<any>({ url: URL.userRegister, params: {}, data: data, headers: { 'Content-Type': 'multipart/form-data;charset=utf-8' } });
 const updateUserPwdApi = async (params: any, data:any) => post<any>({ url: URL.updateUserPwd, params: params, data:data });
 const updateUserInfoApi = async (params: any,data: any) => post<any>({ url: URL.updateUserInfo, params:params, data: data, headers: { 'Content-Type': 'multipart/form-data;charset=utf-8' } });
 

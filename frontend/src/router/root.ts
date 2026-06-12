@@ -39,14 +39,9 @@ const constantRouterMap = [
       {
         path: 'usercenter',
         name: 'usercenter',
-        redirect: '/index/usercenter/addressView',
+        redirect: '/index/usercenter/userInfoEditView',
         component: () => import('/@/views/index/usercenter.vue'),
         children: [
-          {
-            path: 'addressView',
-            name: 'addressView',
-            component: () => import('/@/views/index/user/address-view.vue')
-          },
           {
             path: 'wishThingView',
             name: 'wishThingView',
@@ -88,21 +83,6 @@ const constantRouterMap = [
             component: () => import('/@/views/index/user/userinfo-edit-view.vue')
           },
           {
-            path: 'followView',
-            name: 'followView',
-            component: () => import('/@/views/index/user/follow-view.vue')
-          },
-          {
-            path: 'fansView',
-            name: 'fansView',
-            component: () => import('/@/views/index/user/fans-view.vue')
-          },
-          {
-            path: 'scoreView',
-            name: 'scoreView',
-            component: () => import('/@/views/index/user/score-view.vue')
-          },
-          {
             path: 'commentView',
             name: 'commentView',
             component: () => import('/@/views/index/user/comment-view.vue')
@@ -111,16 +91,6 @@ const constantRouterMap = [
             path: 'securityView',
             name: 'securityView',
             component: () => import('/@/views/index/user/security-view.vue')
-          },
-          {
-            path: 'pushView',
-            name: 'pushView',
-            component: () => import('/@/views/index/user/push-view.vue')
-          },
-          {
-            path: 'messageView',
-            name: 'messageView',
-            component: () => import('/@/views/index/user/message-view.vue')
           },
         ]
       }

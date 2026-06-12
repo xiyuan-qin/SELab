@@ -8,23 +8,28 @@
       <input placeholder="搜索下一个坑..." ref="keywordRef" @keyup.enter="search" />
     </div>
     <div class="right-view">
-      <a style="font-size:16px;line-height: 32px;" @click="handleZhaoren">我要压榨牛马</a>
+      <a v-if="!userStore.isLogin || userStore.isHr" style="font-size:16px;line-height: 32px;" @click="handleZhaoren">我要压榨牛马</a>
       <template v-if="userStore.user_token">
+        <span class="nm-role-badge" :class="userStore.isHr ? 'is-hr' : 'is-seeker'">
+          {{ userStore.isHr ? '工头' : '牛马' }}
+        </span>
         <a-dropdown>
           <a class="ant-dropdown-link" @click="e => e.preventDefault()">
             <img :src="AvatarIcon" class="self-img" >
           </a>
           <template #overlay>
             <a-menu>
-              <a-menu-item>
-                <a @click="goUserCenter('resumeEditView')">我的卖身契</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a @click="goUserCenter('userInfoEditView')">牛马设置</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a @click="quit()">提桶跑路</a>
-              </a-menu-item>
+              <template v-if="userStore.isHr">
+                <a-menu-item><a @click="goUserCenter('myThingView')">坑位管理</a></a-menu-item>
+                <a-menu-item><a @click="goUserCenter('myCompanyView')">老板档案</a></a-menu-item>
+                <a-menu-item><a @click="goUserCenter('userInfoEditView')">工头设置</a></a-menu-item>
+              </template>
+              <template v-else>
+                <a-menu-item><a @click="goUserCenter('resumeEditView')">我的卖身契</a></a-menu-item>
+                <a-menu-item><a @click="goUserCenter('myPostView')">跳坑记录</a></a-menu-item>
+                <a-menu-item><a @click="goUserCenter('userInfoEditView')">牛马设置</a></a-menu-item>
+              </template>
+              <a-menu-item><a @click="quit()">提桶跑路</a></a-menu-item>
             </a-menu>
           </template>
         </a-dropdown>

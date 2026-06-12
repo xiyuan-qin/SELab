@@ -96,7 +96,7 @@ const getCollectThingList =()=> {
   flex: 1;
 
   .list-title {
-    color: #152844;
+    color: var(--nm-text-main);
     font-weight: 600;
     font-size: 18px;
     line-height: 24px;
@@ -106,7 +106,7 @@ const getCollectThingList =()=> {
 
   .list-tabs-view {
     position: relative;
-    border-bottom: 1px solid #cedce4;
+    border-bottom: 1px solid var(--nm-border);
     height: 12px;
     line-height: 42px;
   }

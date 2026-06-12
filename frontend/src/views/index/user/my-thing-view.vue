@@ -462,7 +462,7 @@ const hideModal = () => {
 <style scoped lang="less">
 
 .list-title {
-  color: #152844;
+  color: var(--nm-text-main);
   font-weight: 600;
   font-size: 18px;
   line-height: 24px;

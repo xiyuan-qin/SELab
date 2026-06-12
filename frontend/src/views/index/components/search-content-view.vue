@@ -121,7 +121,7 @@ const getThingList = (data) => {
   height: 100px;
   line-height: 100px;
   font-size: 20px;
-  color: #152844;
+  color: var(--nm-text-main);
   text-align: center;
   position: fixed;
   top: 56px;
@@ -137,12 +137,12 @@ const getThingList = (data) => {
 
   .tab-text {
     float: left;
-    color: #5f77a6;
+    color: var(--nm-text-sub);
     font-size: 14px;
   }
 
   .strong {
-    color: #152844;
+    color: var(--nm-text-main);
     font-weight: 600;
     margin: 0 4px;
   }

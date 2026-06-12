@@ -47,6 +47,27 @@ urlpatterns = [
     path('admin/overview/count', admin.overview_count),
     path('admin/overview/sysInfo', admin.overview_sys_info),
 
+    # ---------- 后台 岗位管理 ----------
+    path('admin/thing/list', admin.thing_list),
+    path('admin/thing/create', admin.thing_create),
+    path('admin/thing/update', admin.thing_update),
+    path('admin/thing/delete', admin.thing_delete),
+
+    # ---------- 后台 公司管理 ----------
+    path('admin/company/list', admin.company_list),
+    path('admin/company/create', admin.company_create),
+    path('admin/company/update', admin.company_update),
+    path('admin/company/delete', admin.company_delete),
+
+    # ---------- 后台 简历管理 ----------
+    path('admin/resume/list', admin.resume_list),
+    path('admin/resume/update', admin.resume_update),
+    path('admin/resume/delete', admin.resume_delete),
+
+    # ---------- 后台 评论管理 ----------
+    path('admin/comment/list', admin.comment_list),
+    path('admin/comment/delete', admin.comment_delete),
+
     # ---------- 后台 分类管理 ----------
     path('admin/classification/list', common.classification_list),
     path('admin/classification/create', common.classification_create),

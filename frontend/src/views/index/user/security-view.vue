@@ -115,13 +115,13 @@ input, textarea {
   flex: 1;
 
   .list-title {
-    color: #152844;
+    color: var(--nm-text-main);
     font-weight: 600;
     font-size: 18px;
     //line-height: 24px;
     height: 48px;
     margin-bottom: 4px;
-    border-bottom: 1px solid #cedce4;
+    border-bottom: 1px solid var(--nm-border);
   }
 }
 
@@ -134,7 +134,7 @@ input, textarea {
 
     .label {
       width: 100px;
-      color: #152844;
+      color: var(--nm-text-main);
       font-weight: 600;
       font-size: 14px;
     }
@@ -162,19 +162,19 @@ input, textarea {
     }
 
     .input-dom {
-      background: #f8fafb;
+      background: var(--nm-bg-soft);
       border-radius: 4px;
       width: 240px;
       height: 40px;
       line-height: 40px;
       font-size: 14px;
-      color: #5f77a6;
+      color: var(--nm-text-sub);
       padding: 0 12px;
       margin-right: 16px;
     }
 
     .change-btn {
-      color: #4684e2;
+      color: var(--nm-primary);
       font-size: 14px;
       border: none;
       outline: none;
@@ -182,13 +182,13 @@ input, textarea {
     }
 
     .wx-text {
-      color: #5f77a6;
+      color: var(--nm-text-sub);
       font-size: 14px;
       margin-right: 16px;
     }
 
     .edit-pwd-btn {
-      color: #4684e2;
+      color: var(--nm-primary);
       font-size: 14px;
       cursor: pointer;
     }

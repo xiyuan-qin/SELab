@@ -87,7 +87,7 @@ const handleDetail =(thingId) =>{
   flex: 1;
 
   .list-title {
-    color: #152844;
+    color: var(--nm-text-main);
     font-weight: 600;
     font-size: 18px;
     line-height: 24px;
@@ -103,7 +103,7 @@ const handleDetail =(thingId) =>{
   margin-top: 12px;
 
   .header {
-    border-bottom: 1px solid #cedce4;
+    border-bottom: 1px solid var(--nm-border);
     padding-bottom: 12px;
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
@@ -111,7 +111,7 @@ const handleDetail =(thingId) =>{
     font-size: 14px;
 
     .text {
-      color: #6f6f6f;
+      color: var(--nm-text-sub);
     }
 
     .mg-4 {
@@ -120,12 +120,12 @@ const handleDetail =(thingId) =>{
 
     .num {
       font-weight: 500;
-      color: #152844;
+      color: var(--nm-text-main);
     }
 
     .num {
       font-weight: 500;
-      color: #152844;
+      color: var(--nm-text-main);
     }
 
     .time {
@@ -194,7 +194,7 @@ const handleDetail =(thingId) =>{
       }
 
       .name {
-        color: #152844;
+        color: var(--nm-text-main);
         font-weight: 600;
         font-size: 14px;
         line-height: 18px;
@@ -218,7 +218,7 @@ const handleDetail =(thingId) =>{
       }
 
       .type {
-        color: #6f6f6f;
+        color: var(--nm-text-sub);
         font-size: 12px;
       }
 
@@ -233,17 +233,17 @@ const handleDetail =(thingId) =>{
       -webkit-box-flex: 1;
       -ms-flex: 1;
       flex: 1;
-      border-left: 1px solid #cedce4;
+      border-left: 1px solid var(--nm-border);
       padding-left: 12px;
       line-height: 22px;
       font-size: 14px;
 
       .title {
-        color: #6f6f6f;
+        color: var(--nm-text-sub);
       }
 
       .name {
-        color: #152844;
+        color: var(--nm-text-main);
       }
 
       .text {
@@ -267,11 +267,11 @@ const handleDetail =(thingId) =>{
     padding-top: 14px;
 
     .text {
-      color: #6f6f6f;
+      color: var(--nm-text-sub);
     }
 
     .open {
-      color: #4684e2;
+      color: var(--nm-primary);
       margin-left: 8px;
       cursor: pointer;
     }
@@ -283,17 +283,17 @@ const handleDetail =(thingId) =>{
     }
 
     .text {
-      color: #6f6f6f;
+      color: var(--nm-text-sub);
     }
 
     .num {
-      color: #152844;
+      color: var(--nm-text-main);
       margin: 0 40px 0 8px;
     }
 
     .money {
       font-size: 14px;
-      color: #6f6f6f;
+      color: var(--nm-text-sub);
       margin-left: 8px;
     }
   }
