@@ -31,3 +31,12 @@ pnpm-lock.yaml*
 ./history
 .claude/
 docs/
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*.sqlite3
+.venv/
+venv/
+/upload/
+.env
