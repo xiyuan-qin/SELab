@@ -1,44 +1,43 @@
-"""操作日志中间件 —— 在 settings.MIDDLEWARE 中以
-`myapp.middlewares.LogMiddleware.OpLogs` 引用。
-
-记录非 GET 的写操作到 OpLog 表，便于后台审计。
-"""
+# -*- coding:utf-8 -*-
 import time
+import json
 
 from django.utils.deprecation import MiddlewareMixin
 
+from myapp import utils
+from myapp.serializers import OpLogSerializer
+
 
 class OpLogs(MiddlewareMixin):
-    # 不记录这些前缀，避免噪音
-    SKIP_PREFIXES = ('/admin/', '/static/', '/upload/', '/favicon.ico')
+    """记录每次请求的基本信息并在响应时保存耗时到数据库。"""
 
     def process_request(self, request):
-        request._op_start = time.time()
+        # 在请求对象上保存开始时间和初始元信息，避免中间件实例属性竞争
+        request._oplog_start = time.time()
+        meta = {
+            're_url': request.path,
+            're_method': request.method,
+            're_ip': utils.get_ip(request),
+        }
+
+        # 尝试序列化请求参数（可选）
+        try:
+            params = request.GET.dict() if request.method == 'GET' else request.POST.dict()
+            if params:
+                meta['re_content'] = json.dumps(params, ensure_ascii=False)
+        except Exception:
+            # 保持容错，不影响主流程
+            pass
+
+        request._oplog_meta = meta
 
     def process_response(self, request, response):
-        try:
-            path = request.path
-            if request.method == 'GET':
-                return response
-            if any(path.startswith(p) for p in self.SKIP_PREFIXES):
-                return response
+        start = getattr(request, '_oplog_start', None)
+        meta = getattr(request, '_oplog_meta', None)
+        if start is not None and isinstance(meta, dict):
+            meta['access_time'] = int((time.time() - start) * 1000)
+            serializer = OpLogSerializer(data=meta)
+            if serializer.is_valid():
+                serializer.save()
 
-            # 延迟导入，避免应用尚未就绪时出错
-            from server1.myapp.models import OpLog
-            from server1.myapp.utils import get_client_ip
-
-            cost = ''
-            if hasattr(request, '_op_start'):
-                cost = '%.0f' % ((time.time() - request._op_start) * 1000)
-
-            OpLog.objects.create(
-                re_ip=get_client_ip(request),
-                re_url=path,
-                re_method=request.method,
-                re_content=path.rsplit('/', 1)[-1],
-                access_time=cost,
-            )
-        except Exception:
-            # 日志失败绝不能影响主流程
-            pass
         return response
