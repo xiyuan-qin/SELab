@@ -1,111 +1,66 @@
-"""通用工具：统一响应格式 + token 生成
+import datetime
+import hashlib
+import time
+from typing import List, Dict, Any
 
-前端约定的响应信封：{ code, msg, data }，code == 0 表示成功。
-"""
-import uuid
-
-from django.http import JsonResponse
-
-
-def success(data=None, msg='success'):
-    return JsonResponse({'code': 0, 'msg': msg, 'data': data}, json_dumps_params={'ensure_ascii': False})
+from myapp.serializers import ErrorLogSerializer
 
 
-def error(msg='error', code=-1, data=None):
-    return JsonResponse({'code': code, 'msg': msg, 'data': data}, json_dumps_params={'ensure_ascii': False})
+def get_timestamp() -> int:
+    """返回当前毫秒时间戳（整数）。"""
+    return int(time.time() * 1000)
 
 
-def make_token():
-    return uuid.uuid4().hex
+def md5value(text: str) -> str:
+    """计算给定字符串的 MD5（小写）。"""
+    return hashlib.md5(text.encode('utf-8')).hexdigest().lower()
 
 
-def get_client_ip(request):
-    xff = request.META.get('HTTP_X_FORWARDED_FOR')
-    if xff:
-        return xff.split(',')[0].strip()
-    return request.META.get('REMOTE_ADDR')
+def dict_fetchall(cursor) -> List[Dict[str, Any]]:
+    """把数据库 cursor 的结果转换为字典列表。"""
+    cols = [c[0] for c in cursor.description]
+    return [dict(zip(cols, row)) for row in cursor.fetchall()]
 
 
-def user_to_dict(user):
-    return {
-        'id': user.id,
-        'username': user.username,
-        'nickname': user.nickname,
-        'avatar': user.avatar,
-        'mobile': user.mobile,
-        'email': user.email,
-        'gender': user.gender,
-        'description': user.description,
-        'role': user.role,
-        'score': user.score,
-        'status': user.status,
-        'create_time': user.create_time.strftime('%Y-%m-%d %H:%M:%S') if user.create_time else None,
+def get_ip(request) -> str:
+    """尽量从请求头中解析客户端 IP（优先 X-Real-IP / X-Forwarded-For）。"""
+    x_real = request.META.get('HTTP_X_REAL_IP')
+    if x_real:
+        return x_real
+    x_forwarded = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded:
+        return x_forwarded.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR', '')
+
+
+def get_ua(request) -> str:
+    """返回 User-Agent（最多 200 字符）。"""
+    ua = request.META.get('HTTP_USER_AGENT', '')
+    return ua[:200]
+
+
+def getWeekDays() -> List[str]:
+    """返回最近 7 天（含今天）的日期列表，格式 'YYYY-MM-DD'，按升序。"""
+    today = datetime.date.today()
+    days = [(today - datetime.timedelta(days=i)).strftime('%Y-%m-%d') for i in range(6, -1, -1)]
+    return days
+
+
+def get_monday() -> str:
+    """返回本周周一的日期字符串 'YYYY-MM-DD'。"""
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday())
+    return monday.strftime('%Y-%m-%d')
+
+
+def log_error(request, content) -> None:
+    """使用 `ErrorLogSerializer` 保存错误日志（容错地构造载荷）。"""
+    payload = {
+        'ip': get_ip(request),
+        'method': getattr(request, 'method', ''),
+        'url': getattr(request, 'path', ''),
+        'content': content,
     }
-
-
-def _fmt_time(value):
-    return value.strftime('%Y-%m-%d %H:%M:%S') if value else None
-
-
-def thing_to_dict(thing):
-    return {
-        'id': thing.id,
-        'title': thing.title,
-        'cover': thing.cover,
-        'description': thing.description,
-        'salary': thing.salary,
-        'classification_id': thing.classification_id,
-        'classification_title': thing.classification.title if thing.classification else None,
-        'company_id': thing.company_id,
-        'company_name': thing.company.name if thing.company else None,
-        'status': thing.status,
-        'browse_count': thing.browse_count,
-        'wish_count': thing.wish_count,
-        'collect_count': thing.collect_count,
-        'comment_count': thing.comment_count,
-        'tags': [t.title for t in thing.tags.all()],
-        'create_time': _fmt_time(thing.create_time),
-    }
-
-
-def company_to_dict(company):
-    return {
-        'id': company.id,
-        'name': company.name,
-        'logo': company.logo,
-        'scale': company.scale,
-        'address': company.address,
-        'description': company.description,
-        'user_id': company.user_id,
-        'user_name': company.user.username if company.user else None,
-        'create_time': _fmt_time(company.create_time),
-    }
-
-
-def resume_to_dict(resume):
-    return {
-        'id': resume.id,
-        'name': resume.name,
-        'mobile': resume.mobile,
-        'email': resume.email,
-        'education': resume.education,
-        'experience': resume.experience,
-        'content': resume.content,
-        'file': resume.file,
-        'user_id': resume.user_id,
-        'user_name': resume.user.username if resume.user else None,
-        'create_time': _fmt_time(resume.create_time),
-    }
-
-
-def comment_to_dict(comment):
-    return {
-        'id': comment.id,
-        'content': comment.content,
-        'like_count': comment.like_count,
-        'user_id': comment.user_id,
-        'user_name': comment.user.username if comment.user else None,
-        'thing_id': comment.thing_id,
-        'thing_title': comment.thing.title if comment.thing else None,
-        'create_time': _fmt_time(comment.create_time),
-    }
+    serializer = ErrorLogSerializer(data=payload)
+    if serializer.is_valid():
+        serializer.save()
