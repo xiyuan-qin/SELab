@@ -24,8 +24,8 @@ class OpLogs(MiddlewareMixin):
                 return response
 
             # 延迟导入，避免应用尚未就绪时出错
-            from myapp.models import OpLog
-            from myapp.utils import get_client_ip
+            from server1.myapp.models import OpLog
+            from server1.myapp.utils import get_client_ip
 
             cost = ''
             if hasattr(request, '_op_start'):

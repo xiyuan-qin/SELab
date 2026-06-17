@@ -3,9 +3,9 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 
-from myapp.models import (Admin, Banner, Classification, Comment, Company,
+from server1.myapp.models import (Admin, Banner, Classification, Comment, Company,
                           Notice, Order, Resume, Thing, User)
-from myapp.utils import (comment_to_dict, company_to_dict, error, make_token,
+from server1.myapp.utils import (comment_to_dict, company_to_dict, error, make_token,
                          resume_to_dict, success, thing_to_dict, user_to_dict)
 
 

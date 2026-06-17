@@ -2,8 +2,8 @@
 from django.contrib.auth.hashers import check_password, make_password
 from django.views.decorators.csrf import csrf_exempt
 
-from myapp.models import User
-from myapp.utils import error, make_token, success, user_to_dict
+from server1.myapp.models import User
+from server1.myapp.utils import error, make_token, success, user_to_dict
 
 
 @csrf_exempt

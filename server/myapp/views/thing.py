@@ -2,8 +2,8 @@
 from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 
-from myapp.models import Classification, Company, Thing, User
-from myapp.utils import error, success, thing_to_dict
+from server1.myapp.models import Classification, Company, Thing, User
+from server1.myapp.utils import error, success, thing_to_dict
 
 
 def _get_user(request):

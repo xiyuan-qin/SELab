@@ -6,7 +6,8 @@
 """
 from django.urls import path
 
-from myapp.views import admin, common, thing, user
+from server1.myapp.views import user
+from server1.myapp.views import admin, common, thing
 
 urlpatterns = [
     # ---------- 前台 用户 ----------

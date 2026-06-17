@@ -1,8 +1,8 @@
 """分类 / 公告 / 广告等通用接口"""
 from django.views.decorators.csrf import csrf_exempt
 
-from myapp.models import Banner, Classification, Notice
-from myapp.utils import error, success
+from server1.myapp.models import Banner, Classification, Notice
+from server1.myapp.utils import error, success
 
 
 # ---------------- 分类 ----------------
